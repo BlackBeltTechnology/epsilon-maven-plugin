@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.epsilon.emc.emf.EmfModel;
+import org.eclipse.epsilon.emc.plainxml.PlainXmlModel;
 import org.eclipse.epsilon.eol.models.ModelRepository;
 import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
@@ -29,6 +30,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static hu.blackbelt.judo.generator.maven.plugin.EmfModelUtils.load;
+import static hu.blackbelt.judo.generator.maven.plugin.XmlModelUtil.loadXml;
 
 public abstract class AbstractEpsilonMojo extends AbstractMojo{
 
@@ -49,7 +51,10 @@ public abstract class AbstractEpsilonMojo extends AbstractMojo{
 
     @Parameter(readonly = true)
     public List<Model> models;
-    
+
+    @Parameter(readonly = true)
+    public List<XmlModel> xmlModels;
+
     private Log log = new MavenLog(getLog());
 
     static {
@@ -111,7 +116,18 @@ public abstract class AbstractEpsilonMojo extends AbstractMojo{
                 emfModels.put(emf, load(log, resourceSet, modelRepository, emf, artifactFile));
             }
         }
+    }
 
+    public void addPlainXmlModels(ResourceSet resourceSet, ModelRepository modelRepository, Map<XmlModel, PlainXmlModel> xmlModelMap) throws MojoExecutionException {
+        if (xmlModels != null) {
+            for (XmlModel xml : xmlModels) {
+                log.info("XML Model: " + xml.toString());
+                URI artifactFile = getArtifactAsEclipseURI(xml.getArtifact());
+                log.info("    Artifact file: : " + artifactFile.toString());
+
+                xmlModelMap.put(xml, loadXml(log, resourceSet, modelRepository, xml, artifactFile));
+            }
+        }
     }
 
     public boolean isValidURL(String url) {

@@ -1,9 +1,5 @@
 package hu.blackbelt.judo.generator.maven.plugin.execute;
 
-import java.io.File;
-import java.net.URI;
-import java.util.Map;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eclipse.epsilon.egl.EglFileGeneratingTemplateFactory;
@@ -11,6 +7,10 @@ import org.eclipse.epsilon.egl.EglTemplateFactory;
 import org.eclipse.epsilon.egl.EglTemplateFactoryModuleAdapter;
 import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
 import org.eclipse.epsilon.eol.IEolExecutableModule;
+
+import java.io.File;
+import java.net.URI;
+import java.util.Map;
 
 public class Egl extends Eol {
 
@@ -21,7 +21,7 @@ public class Egl extends Eol {
 	@Parameter(property = "outputRoot", defaultValue = "${project.basedir}/target/generated-sources")
 	private String outputRoot;
 
-	IEolExecutableModule getModule(Map<Object, Object> context) throws MojoExecutionException {
+	EglTemplateFactory getTemplateFactory(Map<Object, Object> context) throws MojoExecutionException {
 		EglTemplateFactory templateFactory;
 		try {
 			templateFactory = EglFileGeneratingTemplateFactory.class.newInstance();
@@ -39,7 +39,7 @@ public class Egl extends Eol {
 			try {
 				((EglFileGeneratingTemplateFactory) templateFactory).setOutputRoot(outputRootDir.getAbsolutePath());
 				if (context.get(ARTIFACT_ROOT)!= null) {
-					URI main = (URI)context.get(ARTIFACT_ROOT); 
+					URI main = (URI)context.get(ARTIFACT_ROOT);
 					((EglFileGeneratingTemplateFactory) templateFactory).setRoot(main);
 				} else {
 					throw new MojoExecutionException("Artifact must be set!");
@@ -48,8 +48,12 @@ public class Egl extends Eol {
 				throw new MojoExecutionException("Could not create tempalte factory", e);
 			}
 		}
+		return templateFactory;
+	}
 
-		module = new EglTemplateFactoryModuleAdapter(templateFactory);
+
+	IEolExecutableModule getModule(Map<Object, Object> context) throws MojoExecutionException {
+		module = new EglTemplateFactoryModuleAdapter(getTemplateFactory(context));
 		return module;
 	}
 
