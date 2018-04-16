@@ -1,12 +1,15 @@
 package hu.blackbelt.judo.generator.maven.plugin;
 
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.epsilon.emc.emf.CachedResourceSet;
 import org.eclipse.epsilon.emc.emf.DefaultXMIResource;
 import org.eclipse.epsilon.emc.emf.EmfModel;
@@ -18,11 +21,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OptimizedEmfModel extends EmfModel {
 	
 	protected ResourceSet createResourceSet() {
 		CachedResourceSet ret =  new CachedResourceSet();
+		ret.getLoadOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");
 		ret.setURIResourceMap(new HashMap<>());
 		return ret;
 	}
@@ -33,6 +38,8 @@ public class OptimizedEmfModel extends EmfModel {
 		
 		// resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("model", new DefaultXMIResource.Factory());
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("model", new OptimizedXmiResourceImpl.Factory());
+
+
 
         // Check if global package registry contains the EcorePackage
 		if (EPackage.Registry.INSTANCE.getEPackage(EcorePackage.eNS_URI) == null) {
@@ -52,6 +59,10 @@ public class OptimizedEmfModel extends EmfModel {
 		resourceSet.getPackageRegistry().put(EcorePackage.eNS_URI, EcorePackage.eINSTANCE);
 		
 		Resource model = resourceSet.createResource(modelUri);
+		if (model instanceof XMLResource) {
+			((XMLResource) model).getDefaultSaveOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");
+		}
+
 		if (this.readOnLoad) {
 			try {
 				model.load(null);
