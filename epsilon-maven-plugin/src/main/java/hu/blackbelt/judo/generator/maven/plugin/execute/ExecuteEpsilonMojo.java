@@ -46,6 +46,10 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
     @Parameter(name = "profile", readonly = true, required = false)
     public Boolean profile = false;
 
+    @Parameter(name = "sourceDirectory", defaultValue = "${baseDir}", readonly = true)
+    public File sourceDirectory;
+
+
     public ExecuteEpsilonMojo() {
     }
 
@@ -75,7 +79,7 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
                             source = new URI("jar:" + getArtifact(eolProgram.artifact).toURI().toString() + "!/"
                                     + eolProgram.source);
                         } else {
-                            source = new File(project.getBasedir(), eolProgram.source).toURI();
+                            source = new File(sourceDirectory, eolProgram.source).toURI();
                         }
 
                         context.put(Egl.ARTIFACT_ROOT, source);
