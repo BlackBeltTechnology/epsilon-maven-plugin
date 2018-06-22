@@ -3,6 +3,8 @@ package hu.blackbelt.judo.generator.maven.plugin;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.epsilon.common.util.StringProperties;
+import org.eclipse.epsilon.eol.models.ModelReference;
+import org.eclipse.epsilon.eol.models.ModelRepository;
 
 import java.io.File;
 import java.util.List;
@@ -209,5 +211,15 @@ public class Model {
                 ", modelUri='" + modelUri + '\'' +
                 ", reuseUnmodifiedFileBasedMetamodels=" + reuseUnmodifiedFileBasedMetamodels +
                 '}';
+    }
+
+    public void addAliases(ModelRepository repository, ModelReference ref) {
+        ref.setName(this.getName());
+        if (this.getAliases() != null) {
+            for (String alias : this.getAliases()) {
+                ref.getAliases().add(alias);
+            }
+        }
+        repository.addModel(ref);
     }
 }

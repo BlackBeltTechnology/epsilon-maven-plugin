@@ -94,19 +94,23 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
                             }
                         }
 
+                        for (XmlModel model : xmlModels.keySet()) {
+                            if (model.getAliases() != null) {
+                                isAliasExists = true;
+                            }
+                        }
+
                         if (isAliasExists) {
                             ModelRepository repository = eolModule.getContext().getModelRepository();
 
                             for (Model model : emfModels.keySet()) {
-                                ModelReference ref = EmfModelUtils.createModelReference(emfModels.get(model));
-                                ref.setName(model.getName());
-                                if (model.getAliases() != null) {
-                                    for (String alias : model.getAliases()) {
-                                        ref.getAliases().add(alias);
-                                    }
-                                }
-                                repository.addModel(ref);
+                                model.addAliases(repository, EmfModelUtils.createModelReference(emfModels.get(model)));
                             }
+
+                            for (XmlModel model : xmlModels.keySet()) {
+                                model.addAliases(repository, EmfModelUtils.createModelReference(emfModels.get(model)));
+                            }
+
                         } else {
                             eolModule.getContext().setModelRepository(projectModelRepository);
                         }

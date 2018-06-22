@@ -1,6 +1,8 @@
 package hu.blackbelt.judo.generator.maven.plugin;
 
 import org.apache.maven.plugins.annotations.Parameter;
+import org.eclipse.epsilon.eol.models.ModelReference;
+import org.eclipse.epsilon.eol.models.ModelRepository;
 
 import java.util.List;
 
@@ -96,4 +98,15 @@ public class XmlModel {
                 ", platformAlias='" + platformAlias + '\'' +
                 '}';
     }
+
+    public void addAliases(ModelRepository repository, ModelReference ref) {
+        ref.setName(this.getName());
+        if (this.getAliases() != null) {
+            for (String alias : this.getAliases()) {
+                ref.getAliases().add(alias);
+            }
+        }
+        repository.addModel(ref);
+    }
+
 }
