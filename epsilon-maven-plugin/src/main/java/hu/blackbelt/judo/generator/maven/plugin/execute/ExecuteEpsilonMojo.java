@@ -108,7 +108,7 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
                             }
 
                             for (XmlModel model : xmlModels.keySet()) {
-                                model.addAliases(repository, EmfModelUtils.createModelReference(emfModels.get(model)));
+                                model.addAliases(repository, EmfModelUtils.createModelReference(xmlModels.get(model)));
                             }
 
                         } else {
