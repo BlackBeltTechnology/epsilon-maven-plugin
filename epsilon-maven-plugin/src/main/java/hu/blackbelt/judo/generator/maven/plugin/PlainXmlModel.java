@@ -1,12 +1,14 @@
 package hu.blackbelt.judo.generator.maven.plugin;
 
+import hu.blackbelt.judo.generator.utils.execution.model.emf.EmfModelContext;
+import hu.blackbelt.judo.generator.utils.execution.model.plainxml.PlainXmlModelContext;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eclipse.epsilon.eol.models.ModelReference;
 import org.eclipse.epsilon.eol.models.ModelRepository;
 
 import java.util.List;
 
-public class XmlModel {
+public class PlainXmlModel {
 
     @Parameter(name = "artifact", readonly = true, required = true)
     String artifact;
@@ -88,7 +90,7 @@ public class XmlModel {
         
 	@Override
     public String toString() {
-        return "XmlModel{" +
+        return "PlainXmlModel{" +
                 "artifact='" + artifact + '\'' +
                 ", name='" + name + '\'' +
                 ", aliases=" + aliases +
@@ -99,14 +101,16 @@ public class XmlModel {
                 '}';
     }
 
-    public void addAliases(ModelRepository repository, ModelReference ref) {
-        ref.setName(this.getName());
-        if (this.getAliases() != null) {
-            for (String alias : this.getAliases()) {
-                ref.getAliases().add(alias);
-            }
-        }
-        repository.addModel(ref);
+    public PlainXmlModelContext toModelContext() {
+        return PlainXmlModelContext.builder()
+                .aliases(aliases)
+                .artifact(artifact)
+                .cached(cached)
+                .name(name)
+                .platformAlias(platformAlias)
+                .readOnLoad(readOnLoad)
+                .storeOnDisposal(storeOnDisposal)
+                .build();
     }
 
 }

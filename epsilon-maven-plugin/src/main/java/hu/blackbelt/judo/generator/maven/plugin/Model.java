@@ -1,5 +1,6 @@
 package hu.blackbelt.judo.generator.maven.plugin;
 
+import hu.blackbelt.judo.generator.utils.execution.model.emf.EmfModelContext;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.epsilon.common.util.StringProperties;
@@ -50,7 +51,7 @@ public class Model {
      * One of the keys used to construct the first argument to {@link org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
      *
      * This key is a comma-separated list of zero or more namespaces URI of some of the metamodels to which
-     * this model conforms. Users may combine this key with  to load "fileBasedMetamodelUris"
+     * this model conforms. Users may combine this key with  to loadEmf "fileBasedMetamodelUris"
      * both file-based and URI-based metamodels at the same time.
      */
     @Parameter(name = "metaModelUris", readonly = true)
@@ -61,7 +62,7 @@ public class Model {
      *
      * This key is a comma-separated list of zero or more {@link URI}s that can be used to locate some of the
      * metamodels to which this model conforms. Users may combine this key with "metaModelUris"
-     * to load both file-based and URI-based metamodels at the same time.
+     * to loadEmf both file-based and URI-based metamodels at the same time.
      */
     @Parameter(name = "fileBasedMetamodelUris", readonly = true)
     List<String> fileBasedMetamodelUris;
@@ -221,5 +222,23 @@ public class Model {
             }
         }
         repository.addModel(ref);
+    }
+
+    public EmfModelContext toModelContext() {
+        return EmfModelContext.builder()
+                .aliases(aliases)
+                .artifact(artifact)
+                .cached(cached)
+                .expand(expand)
+                .fileBasedMetamodelUris(fileBasedMetamodelUris)
+                .metaModelFile(metaModelFile)
+                .metaModelUris(metaModelUris)
+                .modelUri(modelUri)
+                .name(name)
+                .platformAlias(platformAlias)
+                .readOnLoad(readOnLoad)
+                .reuseUnmodifiedFileBasedMetamodels(reuseUnmodifiedFileBasedMetamodels)
+                .storeOnDisposal(storeOnDisposal)
+                .build();
     }
 }

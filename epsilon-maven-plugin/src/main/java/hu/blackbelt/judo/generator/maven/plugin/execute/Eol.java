@@ -1,14 +1,11 @@
 package hu.blackbelt.judo.generator.maven.plugin.execute;
 
-import org.apache.maven.plugin.MojoExecutionException;
+import hu.blackbelt.judo.generator.utils.execution.contexts.EolExecutionContext;
+import hu.blackbelt.judo.generator.utils.execution.contexts.ProgramParameter;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eclipse.epsilon.eol.EolModule;
-import org.eclipse.epsilon.eol.IEolExecutableModule;
 
-import java.io.File;
-import java.net.URI;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Eol {
     @Parameter(name = "source", required = true)
@@ -20,21 +17,14 @@ public class Eol {
     @Parameter(name = "artifact")
     String artifact;
 
-    
-    private EolModule module = new EolModule();
-
-    IEolExecutableModule getModule(Map<Object, Object> context) throws MojoExecutionException {
-        return module;
-    };
-
-    public boolean isOk() {
-        return true;
+    EolExecutionContext toExecutionContext() {
+        return EolExecutionContext.eolExecutionContextBuilder()
+                .artifact(artifact)
+                .parameters(parameters.stream()
+                        .map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
+                        .collect(Collectors.toList()))
+                .source(source)
+                .build();
     }
-
-    public String toString() {
-        return "";
-    }
-    
-    public void post(Map<Object, Object> context) {}
 
 }

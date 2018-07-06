@@ -1,18 +1,22 @@
 package hu.blackbelt.judo.generator.maven.plugin.execute;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.eclipse.epsilon.egl.EgxModule;
-import org.eclipse.epsilon.eol.IEolExecutableModule;
+import hu.blackbelt.judo.generator.utils.execution.contexts.EgxExecutionContext;
+import hu.blackbelt.judo.generator.utils.execution.contexts.EolExecutionContext;
+import hu.blackbelt.judo.generator.utils.execution.contexts.ProgramParameter;
 
-import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Egx extends Egl {
 
-    private EgxModule module;
-
-    IEolExecutableModule getModule(Map<Object, Object> context) throws MojoExecutionException {
-        module = new EgxModule(getTemplateFactory(context));
-        return module;
+    @Override
+    EolExecutionContext toExecutionContext() {
+        return EgxExecutionContext.egxExecutionContextBuilder()
+                .artifact(artifact)
+                .parameters(parameters.stream()
+                        .map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
+                        .collect(Collectors.toList()))
+                .source(source).build();
     }
+
 
 }

@@ -1,25 +1,27 @@
 package hu.blackbelt.judo.generator.maven.plugin.execute;
 
-import java.util.Map;
+import java.util.stream.Collectors;
 
+import hu.blackbelt.judo.generator.utils.execution.contexts.EmlExecutionContext;
+import hu.blackbelt.judo.generator.utils.execution.contexts.EolExecutionContext;
+import hu.blackbelt.judo.generator.utils.execution.contexts.ProgramParameter;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eclipse.epsilon.ecl.EclModule;
-import org.eclipse.epsilon.ecl.trace.MatchTrace;
-import org.eclipse.epsilon.eml.EmlModule;
-import org.eclipse.epsilon.eol.IEolExecutableModule;
 
 public class Eml extends Etl {
 	
 	@Parameter(property = "useMatchTrace", defaultValue = "matchTrace")
 	private String useMatchTrace;
 	
-	private EmlModule emlModule;
+	@Override
+    EolExecutionContext toExecutionContext() {
+        return EmlExecutionContext.emlExecutionContextBuilder()
+                .artifact(artifact)
+                .parameters(parameters.stream()
+                        .map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
+                        .collect(Collectors.toList()))
+                .source(source)
+                .useMatchTrace(useMatchTrace)
+                .build();
+    }
 
-    IEolExecutableModule getModule(Map<Object, Object> context) {
-        emlModule = new EmlModule();
-        if (useMatchTrace != null) {
-			emlModule.getContext().setMatchTrace((MatchTrace)context.get(useMatchTrace));
-		}
-        return emlModule;
-    };
 }

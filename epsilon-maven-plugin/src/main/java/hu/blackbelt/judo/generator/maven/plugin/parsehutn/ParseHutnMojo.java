@@ -2,7 +2,8 @@ package hu.blackbelt.judo.generator.maven.plugin.parsehutn;
 
 import com.google.common.collect.Maps;
 import hu.blackbelt.judo.generator.maven.plugin.AbstractEpsilonMojo;
-import hu.blackbelt.judo.generator.maven.plugin.EmfModelUtils;
+import hu.blackbelt.judo.generator.utils.execution.EmfUtils;
+import hu.blackbelt.judo.generator.utils.execution.model.emf.EmfModelUtils;
 import hu.blackbelt.judo.generator.maven.plugin.Model;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -43,9 +44,10 @@ public class ParseHutnMojo extends AbstractEpsilonMojo {
     }
 
     synchronized public void execute() throws MojoExecutionException, MojoFailureException {
-    	// EclipsePlatformStreamHandlerFactory.urlMapping.clear();
+    	/*
+        // EclipsePlatformStreamHandlerFactory.urlMapping.clear();
         Map<Model, EmfModel> emfModels = Maps.newConcurrentMap();
-        ResourceSet resourceSet = EmfModelUtils.initResourceSet();
+        ResourceSet resourceSet = EmfUtils.initResourceSet();
         ModelRepository modelRepository = new ModelRepository();
 
     	try {
@@ -78,9 +80,11 @@ public class ParseHutnMojo extends AbstractEpsilonMojo {
         } finally {
            // EclipsePlatformStreamHandlerFactory.urlMapping.clear();
         }
+        */
     }
 
 
+    /*
     private void parseHutnAndStoreModel(HutnModule module)
             throws Exception {
         getLog().info("Start parsing HUTN file");
@@ -109,6 +113,6 @@ public class ParseHutnMojo extends AbstractEpsilonMojo {
         context.setModelRepository(modelRepository);
         module.setContext(context);
     }
-
+    */
 
 }

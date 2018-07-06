@@ -1,5 +1,7 @@
 package hu.blackbelt.judo.generator.maven.plugin;
 
+import hu.blackbelt.judo.generator.utils.execution.Log;
+
 public class MavenLog implements Log {
 
 	final org.apache.maven.plugin.logging.Log log;

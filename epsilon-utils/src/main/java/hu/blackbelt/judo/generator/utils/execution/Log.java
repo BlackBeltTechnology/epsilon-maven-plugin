@@ -1,4 +1,4 @@
-package hu.blackbelt.judo.generator.maven.plugin;
+package hu.blackbelt.judo.generator.utils.execution;
 
 public interface Log {
 	

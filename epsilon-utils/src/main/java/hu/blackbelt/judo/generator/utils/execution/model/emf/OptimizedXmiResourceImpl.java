@@ -1,4 +1,4 @@
-package hu.blackbelt.judo.generator.maven.plugin;
+package hu.blackbelt.judo.generator.utils.execution.model.emf;
 
 
 import org.eclipse.emf.common.util.URI;
@@ -31,7 +31,7 @@ public class OptimizedXmiResourceImpl extends XMIResourceImpl {
 	 */
 	private void setOptimizedOptions() {
 		super.setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
-		this.getDefaultLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, Boolean.TRUE);	
+		this.getDefaultLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, Boolean.TRUE);
 		this.getDefaultLoadOptions().put(XMIResource.OPTION_USE_DEPRECATED_METHODS, false);
 		this.getDefaultLoadOptions().put(XMIResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(10000, true));
 		this.getDefaultLoadOptions().put(XMIResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object,Object>());
