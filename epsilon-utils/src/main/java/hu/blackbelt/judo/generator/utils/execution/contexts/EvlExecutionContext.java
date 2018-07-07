@@ -21,55 +21,55 @@ public class EvlExecutionContext extends EolExecutionContext {
 
     @Builder(builderMethodName = "evlExecutionContextBuilder")
     public EvlExecutionContext(String source, List<ProgramParameter> parameters, String artifact) {
-		super(source, parameters, artifact);
-	}
+        super(source, parameters, artifact);
+    }
 
-	public IEolExecutableModule getModule(Map<Object, Object> context) {
-		return module;
-	};
+    public IEolExecutableModule getModule(Map<Object, Object> context) {
+        return module;
+    };
 
-	public boolean isOk() {
-		return unstatisfiedErrors().isEmpty();
-	}
+    public boolean isOk() {
+        return unstatisfiedErrors().isEmpty();
+    }
 
-	private List<UnsatisfiedConstraint> unstatisfiedWarnings() {
-		return module.getContext().getUnsatisfiedConstraints().stream()
-				.filter((uc) -> uc.getConstraint().isCritique())
-				.collect(Collectors.toList());
-	}
-	
-	private List<UnsatisfiedConstraint> unstatisfiedErrors() {
-		return module.getContext().getUnsatisfiedConstraints().stream()
-				.filter((uc) -> !uc.getConstraint().isCritique())
-				.collect(Collectors.toList());
-	}
+    private List<UnsatisfiedConstraint> unstatisfiedWarnings() {
+        return module.getContext().getUnsatisfiedConstraints().stream()
+                .filter((uc) -> uc.getConstraint().isCritique())
+                .collect(Collectors.toList());
+    }
 
-	public String toString() {
-		Collection<UnsatisfiedConstraint> unsatisfied = module.getContext().getUnsatisfiedConstraints();
+    private List<UnsatisfiedConstraint> unstatisfiedErrors() {
+        return module.getContext().getUnsatisfiedConstraints().stream()
+                .filter((uc) -> !uc.getConstraint().isCritique())
+                .collect(Collectors.toList());
+    }
 
-		StringBuffer stringBuffer = new StringBuffer();
+    public String toString() {
+        Collection<UnsatisfiedConstraint> unsatisfied = module.getContext().getUnsatisfiedConstraints();
 
-		if (unsatisfied.size() > 0) {
-			printErrors(stringBuffer);
-			printWarnings(stringBuffer);
-		} else {
-			stringBuffer.append("All constraints have been satisfied");
-		}
-		return stringBuffer.toString();
+        StringBuffer stringBuffer = new StringBuffer();
 
-	}
+        if (unsatisfied.size() > 0) {
+            printErrors(stringBuffer);
+            printWarnings(stringBuffer);
+        } else {
+            stringBuffer.append("All constraints have been satisfied");
+        }
+        return stringBuffer.toString();
 
-	private void printErrors(StringBuffer stringBuffer) {
-		stringBuffer.append(unstatisfiedErrors().size() + " error(s) \n");
-		for (UnsatisfiedConstraint uc : unstatisfiedErrors()) {
-			stringBuffer.append(uc.getMessage() + "\n");
-		}
-	}
-	
-	private void printWarnings(StringBuffer stringBuffer) {
-		stringBuffer.append(unstatisfiedWarnings().size() + " warning(s) \n");
-		for (UnsatisfiedConstraint uc : unstatisfiedWarnings()) {
-			stringBuffer.append(uc.getMessage() + "\n");
-		}
-	}
+    }
+
+    private void printErrors(StringBuffer stringBuffer) {
+        stringBuffer.append(unstatisfiedErrors().size() + " error(s) \n");
+        for (UnsatisfiedConstraint uc : unstatisfiedErrors()) {
+            stringBuffer.append(uc.getMessage() + "\n");
+        }
+    }
+
+    private void printWarnings(StringBuffer stringBuffer) {
+        stringBuffer.append(unstatisfiedWarnings().size() + " warning(s) \n");
+        for (UnsatisfiedConstraint uc : unstatisfiedWarnings()) {
+            stringBuffer.append(uc.getMessage() + "\n");
+        }
+    }
 }

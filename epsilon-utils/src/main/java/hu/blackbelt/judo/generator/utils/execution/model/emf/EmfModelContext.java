@@ -93,7 +93,7 @@ public class EmfModelContext implements ModelContext {
     boolean reuseUnmodifiedFileBasedMetamodels;
 
 
-	@Override
+    @Override
     public String toString() {
         return "EmfModel{" +
                 "artifact='" + artifact + '\'' +
@@ -125,7 +125,7 @@ public class EmfModelContext implements ModelContext {
 
     @Override
     public IModel load(Log log, ResourceSet resourceSet, ModelRepository repository, URI uri) throws EolModelLoadingException {
-	    return EmfModelUtils.loadEmf(log, resourceSet, repository, this, uri);
+        return EmfModelUtils.loadEmf(log, resourceSet, repository, this, uri);
     }
 
 }

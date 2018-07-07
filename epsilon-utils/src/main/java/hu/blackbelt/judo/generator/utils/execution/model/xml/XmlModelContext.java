@@ -17,7 +17,7 @@ public class XmlModelContext extends EmfModelContext implements ModelContext {
 
     String xsdFile;
 
-	@Override
+    @Override
     public String toString() {
         return "XmlModel{" +
                 "artifact='" + getArtifact() + '\'' +

@@ -14,10 +14,10 @@ public class EmlExecutionContext extends EtlExecutionContext {
 
     @Getter
     @NonNull
-	private String useMatchTrace;
+    private String useMatchTrace;
 
     @Builder.Default
-	private EmlModule emlModule = new EmlModule();
+    private EmlModule emlModule = new EmlModule();
 
     @Builder(builderMethodName = "emlExecutionContextBuilder")
     public EmlExecutionContext(String source, List<ProgramParameter> parameters, String artifact, String useMatchTrace) {
@@ -28,8 +28,8 @@ public class EmlExecutionContext extends EtlExecutionContext {
     @Override
     public IEolExecutableModule getModule(Map<Object, Object> context) {
         if (useMatchTrace != null) {
-			emlModule.getContext().setMatchTrace((MatchTrace)context.get(useMatchTrace));
-		}
+            emlModule.getContext().setMatchTrace((MatchTrace)context.get(useMatchTrace));
+        }
         return emlModule;
     };
 }
