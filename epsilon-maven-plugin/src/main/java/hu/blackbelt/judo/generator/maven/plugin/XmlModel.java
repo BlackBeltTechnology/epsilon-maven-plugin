@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.List;
 
 @Data
-public class Model {
+public class XmlModel {
 
     @Parameter(name = "artifact", readonly = true, required = true)
     String artifact;
@@ -35,6 +35,9 @@ public class Model {
 
     @Parameter(name = "platformAlias", readonly = true)
     String platformAlias;
+
+    @Parameter(name = "xsd", readonly = true)
+    String xsd;
 
     /**
      * One of the keys used to construct the first argument to {@link org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
@@ -89,6 +92,7 @@ public class Model {
      */
     @Parameter(name = "reuseUnmodifiedFileBasedMetamodels", defaultValue = "true", readonly = true)
     boolean reuseUnmodifiedFileBasedMetamodels;
+
 
 
     @Override

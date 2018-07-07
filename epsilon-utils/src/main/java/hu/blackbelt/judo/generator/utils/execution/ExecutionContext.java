@@ -12,6 +12,7 @@ import hu.blackbelt.judo.generator.utils.execution.exception.ScriptExecutionExce
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -20,7 +21,6 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.epsilon.common.parse.problem.ParseProblem;
 import org.eclipse.epsilon.emc.emf.tools.EmfTool;
 import org.eclipse.epsilon.eol.IEolExecutableModule;
-import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.IModel;
 import org.eclipse.epsilon.eol.models.ModelRepository;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 @Getter
 @Builder
 @AllArgsConstructor
-public class ExecutionContext {
+public class ExecutionContext implements AutoCloseable {
 
     @Builder.Default
     private Map<ModelContext, IModel> modelContextMap = Maps.newConcurrentMap();
@@ -52,18 +52,21 @@ public class ExecutionContext {
     @Builder.Default
     private ModelRepository projectModelRepository = new ModelRepository();
 
+    @Builder.Default
+    private Boolean rollback = true;
+
     private Log log;
     private List<String> metaModels;
 
     private List<ModelContext> modelContexts;
 
     private ArtifactResolver artifactResolver;
-    private List<EolExecutionContext> executablePrograms;
     private File sourceDirectory;
     private Boolean profile;
 
 
-    public void init() throws Exception {
+    @SneakyThrows
+    public void init() {
 
         // Check if global package registry contains the EcorePackage
         if (EPackage.Registry.INSTANCE.getEPackage(EcorePackage.eNS_URI) == null) {
@@ -79,88 +82,80 @@ public class ExecutionContext {
     }
 
 
-    public void execute() throws ScriptExecutionException {
-
-        try {
-            Exception ex = null;
-            try {
-
-                if (executablePrograms != null) {
-                    for (EolExecutionContext eolProgram : executablePrograms) {
-
-                        /*
-                        URI source = null;
-                        if (eolProgram.getArtifact() != null) {
-                            source = new URI("jar:" + getArtifact(eolProgram.getArtifact()).toURI().toString() + "!/"
-                                    + eolProgram.getSource());
-                        } else {
-                            source = new File(sourceDirectory, eolProgram.source).toURI();
-                        }
-                        */
-                        URI source = null;
-                        source = new File(sourceDirectory, eolProgram.getSource()).toURI();
-                        context.put(EglExecutionContext.ARTIFACT_ROOT, source);
-
-                        IEolExecutableModule eolModule = eolProgram.getModule(context);
-
-                        // Determinate any mode have alias or not
-                        boolean isAliasExists = false;
-                        for (ModelContext model : modelContextMap.keySet()) {
-                            if (model.getAliases() != null) {
-                                isAliasExists = true;
-                            }
-                        }
-
-                        if (isAliasExists) {
-                            ModelRepository repository = eolModule.getContext().getModelRepository();
-
-                            for (ModelContext model : modelContextMap.keySet()) {
-                                model.addAliases(repository, EmfUtils.createModelReference(modelContextMap.get(model)));
-                            }
-
-                        } else {
-                            eolModule.getContext().setModelRepository(projectModelRepository);
-                        }
-
-                        List<ProgramParameter> params = eolProgram.getParameters();
-                        if (params == null) {
-                            params = Lists.newArrayList();
-                        }
-
-                        log.info("Running program: " + source);
-
-                        executeModule(eolModule, source,
-                                params.stream().map(p -> Variable.createReadOnlyVariable(p.getName(), p.getValue()))
-                                        .collect(Collectors.toList()));
-
-                        eolProgram.post(context);
-
-                        if (!eolProgram.isOk()) {
-                            throw new ScriptExecutionException("Program aborted: " + eolProgram.toString());
-                        } else {
-                            log.info("Execution result: " + eolProgram.toString());
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                ex = e;
-                log.error("Error", e);
-            } finally {
-                if (ex != null) {
-                    for (IModel model : projectModelRepository.getModels()) {
-                        model.setStoredOnDisposal(false);
-                    }
-                }
-                projectModelRepository.dispose();
-                if (ex != null) {
-                    throw new ScriptExecutionException("Could not run", ex);
-                }
-            }
-        } finally {
+    public void rollback() {
+        for (IModel model : projectModelRepository.getModels()) {
+            model.setStoredOnDisposal(false);
         }
     }
 
-    private void executeModule(IEolExecutableModule eolModule, URI source, List<Variable> parameters) throws Exception {
+    public void commit() {
+        rollback = false;
+    }
+
+    public void disposeRepository() {
+        if (projectModelRepository != null) {
+            projectModelRepository.dispose();
+        }
+    }
+
+    @SneakyThrows(Exception.class)
+    public void executeProgram(EolExecutionContext eolProgram) {
+        /*
+        URI source = null;
+        if (eolProgram.getArtifact() != null) {
+            source = new URI("jar:" + getArtifact(eolProgram.getArtifact()).toURI().toString() + "!/"
+                    + eolProgram.getSource());
+        } else {
+            source = new File(sourceDirectory, eolProgram.source).toURI();
+        }
+        */
+        URI source = null;
+        source = new File(sourceDirectory, eolProgram.getSource()).toURI();
+        context.put(EglExecutionContext.ARTIFACT_ROOT, source);
+
+        IEolExecutableModule eolModule = eolProgram.getModule(context);
+
+        // Determinate any mode have alias or not
+        boolean isAliasExists = false;
+        for (ModelContext model : modelContextMap.keySet()) {
+            if (model.getAliases() != null) {
+                isAliasExists = true;
+            }
+        }
+
+        if (isAliasExists) {
+            ModelRepository repository = eolModule.getContext().getModelRepository();
+
+            for (ModelContext model : modelContextMap.keySet()) {
+                model.addAliases(repository, EmfUtils.createModelReference(modelContextMap.get(model)));
+            }
+
+        } else {
+            eolModule.getContext().setModelRepository(projectModelRepository);
+        }
+
+        List<ProgramParameter> params = eolProgram.getParameters();
+        if (params == null) {
+            params = Lists.newArrayList();
+        }
+
+        log.info("Running program: " + source);
+
+        executeModule(eolModule, source,
+                params.stream().map(p -> Variable.createReadOnlyVariable(p.getName(), p.getValue()))
+                        .collect(Collectors.toList()));
+
+        eolProgram.post(context);
+
+        if (!eolProgram.isOk()) {
+            throw new ScriptExecutionException("Program aborted: " + eolProgram.toString());
+        } else {
+            log.info("Execution result: " + eolProgram.toString());
+        }
+    }
+
+    @SneakyThrows
+    private void executeModule(IEolExecutableModule eolModule, URI source, List<Variable> parameters) {
         eolModule.parse(source);
         if (profile) {
             Profiler.INSTANCE.reset();
@@ -194,7 +189,7 @@ public class ExecutionContext {
             }
 
             Object result = eolModule.execute();
-            // getLog().info("EolExecutionContext execute result: " + result.toString());
+            // getLog().info("EolExecutionContext executeAll result: " + result.toString());
         } finally {
             if (profile) {
                 Profiler.INSTANCE.stop(source.toString());
@@ -208,13 +203,15 @@ public class ExecutionContext {
         }
     }
 
-    private void addMetaModels() throws Exception {
+    @SneakyThrows
+    private void addMetaModels() {
         for (String metaModel : metaModels) {
             addMetaModel(metaModel);
         }
     }
 
-    public void addMetaModel(String metaModel) throws Exception {
+    @SneakyThrows
+    public void addMetaModel(String metaModel) {
         log.info("Registering ecore: " + metaModel);
         org.eclipse.emf.common.util.URI uri = artifactResolver.getArtifactAsEclipseURI(metaModel);
         log.info("    Meta model: " + uri);
@@ -223,13 +220,15 @@ public class ExecutionContext {
     }
 
 
-    private void addModels() throws EolModelLoadingException {
+    @SneakyThrows
+    private void addModels() {
         for (ModelContext modelContext : modelContexts) {
             addModel(modelContext);
         }
     }
 
-    public void addModel(ModelContext modelContext) throws EolModelLoadingException {
+    @SneakyThrows
+    public void addModel(ModelContext modelContext) {
         log.info("Model: " + modelContext.toString());
         org.eclipse.emf.common.util.URI artifactFile = artifactResolver.getArtifactAsEclipseURI(modelContext.getArtifact());
         log.info("    Artifact file: : " + artifactFile.toString());
@@ -237,4 +236,11 @@ public class ExecutionContext {
     }
 
 
+    @Override
+    public void close() throws Exception {
+        if (rollback) {
+            rollback();
+        }
+        disposeRepository();
+    }
 }

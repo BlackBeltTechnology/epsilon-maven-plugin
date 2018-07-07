@@ -2,7 +2,6 @@ package hu.blackbelt.judo.generator.utils.execution.model.plainxml;
 
 import hu.blackbelt.judo.generator.utils.execution.Log;
 import hu.blackbelt.judo.generator.utils.execution.ModelContext;
-import hu.blackbelt.judo.generator.utils.execution.model.emf.EmfModelUtils;
 import lombok.Builder;
 import lombok.Data;
 import org.eclipse.emf.common.util.URI;
@@ -38,7 +37,7 @@ public class PlainXmlModelContext implements ModelContext {
     boolean cached = true;
 
 
-	@Override
+    @Override
     public String toString() {
         return "PlainXmlModelContext{" +
                 "artifact='" + artifact + '\'' +

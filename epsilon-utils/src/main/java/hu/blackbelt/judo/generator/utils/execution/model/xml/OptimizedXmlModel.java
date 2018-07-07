@@ -12,22 +12,22 @@ import java.util.HashMap;
 import static hu.blackbelt.judo.generator.utils.execution.EmfUtils.loadResourceToResourceSet;
 
 public class OptimizedXmlModel extends XmlModel {
-	
-	protected ResourceSet createResourceSet() {
-		CachedResourceSet ret =  new CachedResourceSet();
-		ret.getLoadOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");
-		ret.setURIResourceMap(new HashMap<>());
-		return ret;
-	}
 
-	public void loadModelFromUri() throws EolModelLoadingException {
-		ResourceSet resourceSet = createResourceSet();
-		
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xml", new OptimizedXmlResourceImpl.Factory());
+    protected ResourceSet createResourceSet() {
+        CachedResourceSet ret =  new CachedResourceSet();
+        ret.getLoadOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");
+        ret.setURIResourceMap(new HashMap<>());
+        return ret;
+    }
 
-		super.determinePackagesFrom(resourceSet);
+    public void loadModelFromUri() throws EolModelLoadingException {
+        ResourceSet resourceSet = createResourceSet();
 
-		modelImpl = loadResourceToResourceSet(this, resourceSet, packages, modelUri, expand, readOnLoad);
-	}
+        resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xml", new OptimizedXmlResourceImpl.Factory());
+
+        super.determinePackagesFrom(resourceSet);
+
+        modelImpl = loadResourceToResourceSet(this, resourceSet, packages, modelUri, expand, readOnLoad);
+    }
 
 }
