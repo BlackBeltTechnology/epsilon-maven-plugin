@@ -18,7 +18,6 @@ public class Ecl extends Eol {
     @Override
 	EolExecutionContext toExecutionContext() {
 		return EclExecutionContext.eclExecutionContextBuilder()
-				.artifact(artifact)
 				.parameters(parameters.stream()
 						.map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
 						.collect(Collectors.toList()))

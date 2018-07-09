@@ -9,12 +9,11 @@ import java.util.stream.Collectors;
 public class Egl extends Eol {
 
 	@Parameter(property = "outputRoot", defaultValue = "${project.basedir}/target/generated-sources")
-	private String outputRoot;
+	protected String outputRoot;
 
 	@Override
 	EolExecutionContext toExecutionContext() {
 		return EglExecutionContext.eglExecutionContextBuilder()
-				.artifact(artifact)
 				.parameters(parameters.stream()
 						.map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
 						.collect(Collectors.toList()))

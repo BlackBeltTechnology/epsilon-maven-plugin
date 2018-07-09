@@ -15,7 +15,6 @@ public class Eml extends Etl {
 	@Override
     EolExecutionContext toExecutionContext() {
         return EmlExecutionContext.emlExecutionContextBuilder()
-                .artifact(artifact)
                 .parameters(parameters.stream()
                         .map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
                         .collect(Collectors.toList()))

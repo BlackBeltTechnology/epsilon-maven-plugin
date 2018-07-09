@@ -10,7 +10,6 @@ public class Evl extends Eol {
 
 	EolExecutionContext toExecutionContext() {
 		return EvlExecutionContext.evlExecutionContextBuilder()
-				.artifact(artifact)
 				.parameters(parameters.stream()
 						.map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
 						.collect(Collectors.toList()))

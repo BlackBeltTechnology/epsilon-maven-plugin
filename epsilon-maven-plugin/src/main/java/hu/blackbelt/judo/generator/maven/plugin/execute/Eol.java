@@ -1,5 +1,6 @@
 package hu.blackbelt.judo.generator.maven.plugin.execute;
 
+import com.google.common.collect.Lists;
 import hu.blackbelt.judo.generator.utils.execution.contexts.EolExecutionContext;
 import hu.blackbelt.judo.generator.utils.execution.contexts.ProgramParameter;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -12,14 +13,10 @@ public class Eol {
     String source;
 
     @Parameter(name = "parameters")
-    List<EolProgramParameter> parameters;
+    List<EolProgramParameter> parameters = Lists.newArrayList();
     
-    @Parameter(name = "artifact")
-    String artifact;
-
     EolExecutionContext toExecutionContext() {
         return EolExecutionContext.eolExecutionContextBuilder()
-                .artifact(artifact)
                 .parameters(parameters.stream()
                         .map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
                         .collect(Collectors.toList()))
