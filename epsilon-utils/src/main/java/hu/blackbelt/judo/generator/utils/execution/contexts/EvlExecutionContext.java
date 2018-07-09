@@ -20,8 +20,8 @@ public class EvlExecutionContext extends EolExecutionContext {
     private EvlModule module = new EvlModule();
 
     @Builder(builderMethodName = "evlExecutionContextBuilder")
-    public EvlExecutionContext(String source, List<ProgramParameter> parameters, String artifact) {
-        super(source, parameters, artifact);
+    public EvlExecutionContext(String source, List<ProgramParameter> parameters) {
+        super(source, parameters);
     }
 
     public IEolExecutableModule getModule(Map<Object, Object> context) {

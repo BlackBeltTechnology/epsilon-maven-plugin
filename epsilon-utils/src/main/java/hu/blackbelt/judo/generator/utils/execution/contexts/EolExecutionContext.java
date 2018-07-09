@@ -19,18 +19,13 @@ public class EolExecutionContext {
     @NonNull
     private List<ProgramParameter> parameters;
 
-    @Getter
-    @NonNull
-    private String artifact;
-
     @Builder.Default
     private EolModule module = new EolModule();
 
     @Builder(builderMethodName = "eolExecutionContextBuilder")
-    public EolExecutionContext(String source, List<ProgramParameter> parameters, String artifact) {
+    public EolExecutionContext(String source, List<ProgramParameter> parameters) {
         this.source = source;
         this.parameters = parameters;
-        this.artifact = artifact;
     }
 
     public IEolExecutableModule getModule(Map<Object, Object> context) throws MojoExecutionException {

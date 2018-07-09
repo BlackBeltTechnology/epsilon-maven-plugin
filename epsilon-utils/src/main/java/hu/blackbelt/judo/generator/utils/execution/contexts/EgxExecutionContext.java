@@ -14,8 +14,8 @@ import java.util.Map;
 public class EgxExecutionContext extends EglExecutionContext {
 
     @Builder(builderMethodName = "egxExecutionContextBuilder")
-    public EgxExecutionContext(String source, List<ProgramParameter> parameters, String artifact, String outputRoot) {
-        super(source, parameters, artifact, outputRoot);
+    public EgxExecutionContext(String source, List<ProgramParameter> parameters, String outputRoot) {
+        super(source, parameters, outputRoot);
     }
 
     @Override

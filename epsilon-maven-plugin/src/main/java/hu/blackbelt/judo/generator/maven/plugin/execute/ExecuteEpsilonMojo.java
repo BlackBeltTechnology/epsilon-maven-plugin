@@ -1,5 +1,6 @@
 package hu.blackbelt.judo.generator.maven.plugin.execute;
 
+import com.google.common.collect.Lists;
 import hu.blackbelt.judo.generator.maven.plugin.AbstractEpsilonMojo;
 import hu.blackbelt.judo.generator.maven.plugin.MavenArtifactResolver;
 import hu.blackbelt.judo.generator.utils.execution.ExecutionContext;
@@ -12,9 +13,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-@Mojo(name = "executeAll", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
+@Mojo(name = "execute", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
 
     @Parameter(name = "eolPrograms", readonly = true, required = true)
@@ -28,14 +28,21 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
 
 
     synchronized public void execute() throws MojoExecutionException, MojoFailureException {
+        List modelContexts = Lists.newArrayList();
+
+        if (models != null) {
+            modelContexts.addAll(models.stream().map(m -> m.toModelContext()).collect(Collectors.toList()));
+        }
+        if (xmlModels != null) {
+            modelContexts.addAll(xmlModels.stream().map(m -> m.toModelContext()).collect(Collectors.toList()));
+        }
+        if (plainXmlModels != null) {
+            modelContexts.addAll(plainXmlModels.stream().map(m -> m.toModelContext()).collect(Collectors.toList()));
+        }
+
         try (ExecutionContext executionContext = ExecutionContext.builder()
                 .metaModels(metaModels)
-                .modelContexts(
-                        Stream.concat(Stream.concat(
-                                models.stream().map(m -> m.toModelContext()),
-                                plainXmlModels.stream().map(m -> m.toModelContext())),
-                                xmlModels.stream().map(m -> m.toModelContext()))
-                                .collect(Collectors.toList()))
+                .modelContexts(modelContexts)
                 .artifactResolver(MavenArtifactResolver.builder()
                         .repoSession(repoSession)
                         .repositories(repositories)
@@ -47,6 +54,7 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
                 .log(log)
                 .build()) {
 
+            executionContext.init();
             eolPrograms.stream().forEach(p -> { executionContext.executeProgram(p.toExecutionContext()); });
             executionContext.commit();
         } catch (Exception e) {

@@ -11,7 +11,6 @@ public class Etl extends Eol {
     @Override
     EolExecutionContext toExecutionContext() {
         return EtlExecutionContext.etlExecutionContextBuilder()
-                .artifact(artifact)
                 .parameters(parameters.stream()
                         .map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
                         .collect(Collectors.toList()))

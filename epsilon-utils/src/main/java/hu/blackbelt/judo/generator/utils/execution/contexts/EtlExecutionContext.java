@@ -17,8 +17,8 @@ public class EtlExecutionContext extends EolExecutionContext {
     EtlModule etlModule = new EtlModule();
 
     @Builder(builderMethodName = "etlExecutionContextBuilder")
-    public EtlExecutionContext(String source, List<ProgramParameter> parameters, String artifact) {
-        super(source, parameters, artifact);
+    public EtlExecutionContext(String source, List<ProgramParameter> parameters) {
+        super(source, parameters);
     }
 
     @Override

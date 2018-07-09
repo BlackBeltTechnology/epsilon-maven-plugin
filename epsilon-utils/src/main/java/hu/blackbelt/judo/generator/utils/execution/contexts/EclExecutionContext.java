@@ -29,8 +29,8 @@ public class EclExecutionContext extends EolExecutionContext {
     private EclModule eclModule = new EclModule();
 
     @Builder(builderMethodName = "eclExecutionContextBuilder")
-    public EclExecutionContext(String source, List<ProgramParameter> parameters, String artifact, String useMatchTrace, String exportMatchTrace) {
-        super(source, parameters, artifact);
+    public EclExecutionContext(String source, List<ProgramParameter> parameters, String useMatchTrace, String exportMatchTrace) {
+        super(source, parameters);
         this.useMatchTrace = useMatchTrace;
         this.exportMatchTrace = exportMatchTrace;
     }

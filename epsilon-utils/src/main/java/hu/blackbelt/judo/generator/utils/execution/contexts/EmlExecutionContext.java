@@ -20,8 +20,8 @@ public class EmlExecutionContext extends EtlExecutionContext {
     private EmlModule emlModule = new EmlModule();
 
     @Builder(builderMethodName = "emlExecutionContextBuilder")
-    public EmlExecutionContext(String source, List<ProgramParameter> parameters, String artifact, String useMatchTrace) {
-        super(source, parameters, artifact);
+    public EmlExecutionContext(String source, List<ProgramParameter> parameters, String useMatchTrace) {
+        super(source, parameters);
         this.useMatchTrace = useMatchTrace;
     }
 

@@ -11,10 +11,10 @@ public class Egx extends Egl {
     @Override
     EolExecutionContext toExecutionContext() {
         return EgxExecutionContext.egxExecutionContextBuilder()
-                .artifact(artifact)
                 .parameters(parameters.stream()
                         .map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
                         .collect(Collectors.toList()))
+                .outputRoot(outputRoot)
                 .source(source).build();
     }
 

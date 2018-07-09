@@ -28,8 +28,8 @@ public class EglExecutionContext extends EolExecutionContext {
     private String outputRoot;
 
     @Builder(builderMethodName = "eglExecutionContextBuilder")
-    public EglExecutionContext(String source, List<ProgramParameter> parameters, String artifact, String outputRoot) {
-        super(source, parameters, artifact);
+    public EglExecutionContext(String source, List<ProgramParameter> parameters, String outputRoot) {
+        super(source, parameters);
         this.outputRoot = outputRoot;
     }
 
