@@ -16,6 +16,7 @@ import org.eclipse.epsilon.eol.models.ModelRepository;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -23,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 public class EmfModelContext implements ModelContext {
 
-    String artifact;
+    Map<String, String> artifacts;
 
     String name;
 
@@ -96,7 +97,7 @@ public class EmfModelContext implements ModelContext {
     @Override
     public String toString() {
         return "EmfModel{" +
-                "artifact='" + artifact + '\'' +
+                "artifacts='" + artifacts + '\'' +
                 ", name='" + name + '\'' +
                 ", aliases=" + aliases +
                 ", readOnLoad=" + readOnLoad +
@@ -124,8 +125,8 @@ public class EmfModelContext implements ModelContext {
     }
 
     @Override
-    public IModel load(Log log, ResourceSet resourceSet, ModelRepository repository, URI uri) throws EolModelLoadingException {
-        return EmfModelUtils.loadEmf(log, resourceSet, repository, this, uri);
+    public IModel load(Log log, ResourceSet resourceSet, ModelRepository repository, Map<String, URI> uriMap) throws EolModelLoadingException {
+        return EmfModelUtils.loadEmf(log, resourceSet, repository, this, uriMap.get("model"));
     }
 
 }

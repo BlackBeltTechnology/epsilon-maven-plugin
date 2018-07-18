@@ -8,11 +8,14 @@ import org.eclipse.epsilon.eol.models.ModelReference;
 import org.eclipse.epsilon.eol.models.ModelRepository;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ModelContext {
-    IModel load(Log log, ResourceSet resourceSet, ModelRepository repository, URI uri) throws EolModelLoadingException;
+
+    IModel load(Log log, ResourceSet resourceSet, ModelRepository repository, Map<String, URI> uris) throws EolModelLoadingException;
     void addAliases(ModelRepository repository, ModelReference ref);
     List<String> getAliases();
-    String getArtifact();
+
+    Map<String, String> getArtifacts();
 
 }

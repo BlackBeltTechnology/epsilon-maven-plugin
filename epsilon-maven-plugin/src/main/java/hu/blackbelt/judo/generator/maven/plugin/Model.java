@@ -1,5 +1,6 @@
 package hu.blackbelt.judo.generator.maven.plugin;
 
+import com.google.common.collect.ImmutableMap;
 import hu.blackbelt.judo.generator.utils.execution.model.emf.EmfModelContext;
 import lombok.Data;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -113,7 +114,7 @@ public class Model {
     public EmfModelContext toModelContext() {
         return EmfModelContext.builder()
                 .aliases(aliases)
-                .artifact(artifact)
+                .artifacts(ImmutableMap.of("model", artifact))
                 .cached(cached)
                 .expand(expand)
                 .fileBasedMetamodelUris(fileBasedMetamodelUris)

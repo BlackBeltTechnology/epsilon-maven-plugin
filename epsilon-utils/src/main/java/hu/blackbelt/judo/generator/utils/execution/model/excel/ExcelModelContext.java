@@ -1,4 +1,4 @@
-package hu.blackbelt.judo.generator.utils.execution.model.plainxml;
+package hu.blackbelt.judo.generator.utils.execution.model.excel;
 
 import hu.blackbelt.judo.generator.utils.execution.Log;
 import hu.blackbelt.judo.generator.utils.execution.ModelContext;
@@ -16,17 +16,15 @@ import java.util.Map;
 
 @Data
 @Builder
-public class PlainXmlModelContext implements ModelContext {
+public class ExcelModelContext implements ModelContext {
 
     Map<String, String> artifacts;
 
+    String spreadSheetPassword;
+
     String name;
 
-    String xsd;
-
     List<String> aliases;
-
-    String platformAlias;
 
     @Builder.Default
     boolean readOnLoad = true;
@@ -40,15 +38,14 @@ public class PlainXmlModelContext implements ModelContext {
 
     @Override
     public String toString() {
-        return "PlainXmlModelContext{" +
-                "artifact='" + artifacts + '\'' +
-                ", xsd='" + xsd + '\'' +
+        return "ExcelModelContext{" +
+                "artifacts='" + artifacts + '\'' +
                 ", name='" + name + '\'' +
                 ", aliases=" + aliases +
                 ", readOnLoad=" + readOnLoad +
                 ", storeOnDisposal=" + storeOnDisposal +
                 ", cached=" + cached +
-                ", platformAlias='" + platformAlias + '\'' +
+                ", spreadSheetPassword='" + spreadSheetPassword + '\'' +
                 '}';
     }
 
@@ -65,7 +62,7 @@ public class PlainXmlModelContext implements ModelContext {
 
     @Override
     public IModel load(Log log, ResourceSet resourceSet, ModelRepository repository, Map<String, URI> uri) throws EolModelLoadingException {
-        return PlainXmlModelUtil.loadPlainXml(log, resourceSet, repository, this, uri.get("xml"));
+        return ExcelModelUtil.loadExcel(log, repository, this, uri.get("excelSheet"), uri.get("excelConfiguration"));
     }
 
 }

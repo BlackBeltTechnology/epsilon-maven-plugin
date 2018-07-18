@@ -1,17 +1,27 @@
 package hu.blackbelt.judo.generator.maven.plugin;
 
 import com.google.common.collect.ImmutableMap;
-import hu.blackbelt.judo.generator.utils.execution.model.plainxml.PlainXmlModelContext;
+import com.google.common.collect.Maps;
+import hu.blackbelt.judo.generator.utils.execution.model.excel.ExcelModelContext;
 import lombok.Data;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.eclipse.epsilon.common.util.StringProperties;
 
+import java.io.File;
 import java.util.List;
 
 @Data
-public class PlainXmlModel {
+public class ExcelModel {
 
     @Parameter(name = "artifact", readonly = true, required = true)
     String artifact;
+
+    @Parameter(name = "configurationArtifact", readonly = true, required = true)
+    String configurationArtifact;
+
+    @Parameter(name = "spreadSheetPassword", readonly = true, required = false)
+    String spreadSheetPassword;
+
 
     @Parameter(name = "name", required = true, readonly = true)
     String name;
@@ -28,32 +38,37 @@ public class PlainXmlModel {
     @Parameter(name = "cached", defaultValue = "true", readonly = true)
     boolean cached = true;
 
+    @Parameter(name = "metaModelFile", readonly = true)
+    File metaModelFile;
+
     @Parameter(name = "platformAlias", readonly = true)
     String platformAlias;
 
+
     @Override
     public String toString() {
-        return "PlainXmlModel{" +
+        return "ExcelModel{" +
                 "artifact='" + artifact + '\'' +
+                "configurationArtifact='" + configurationArtifact + '\'' +
                 ", name='" + name + '\'' +
                 ", aliases=" + aliases +
                 ", readOnLoad=" + readOnLoad +
                 ", storeOnDisposal=" + storeOnDisposal +
                 ", cached=" + cached +
+                ", metaModelFile=" + metaModelFile +
                 ", platformAlias='" + platformAlias + '\'' +
                 '}';
     }
 
-    public PlainXmlModelContext toModelContext() {
-        return PlainXmlModelContext.builder()
+    public ExcelModelContext toModelContext() {
+        return ExcelModelContext.builder()
                 .aliases(aliases)
-                .artifacts(ImmutableMap.of("xml", artifact))
+                .artifacts(ImmutableMap.of("excelSheet", artifact, "excelConfiguration", configurationArtifact))
                 .cached(cached)
                 .name(name)
-                .platformAlias(platformAlias)
                 .readOnLoad(readOnLoad)
                 .storeOnDisposal(storeOnDisposal)
+                .spreadSheetPassword(spreadSheetPassword)
                 .build();
     }
-
 }

@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.joining;
 
 public final class XmlModelUtils {
 
-    public static XmlModel loadXml(Log log, ResourceSet resourceSet, ModelRepository repository, XmlModelContext xmlModelContext, URI uri) throws EolModelLoadingException {
+    public static XmlModel loadXml(Log log, ResourceSet resourceSet, ModelRepository repository, XmlModelContext xmlModelContext, URI uri, URI xsd) throws EolModelLoadingException {
 
         final XmlModel model = createXmlModel(resourceSet);
 
@@ -32,7 +32,7 @@ public final class XmlModelUtils {
         properties.put(XmlModel.PROPERTY_EXPAND, xmlModelContext.isExpand() + "");
         properties.put(XmlModel.PROPERTY_CACHED, xmlModelContext.isCached() + "");
         properties.put(XmlModel.PROPERTY_REUSE_UNMODIFIED_FILE_BASED_METAMODELS, xmlModelContext.isReuseUnmodifiedFileBasedMetamodels() + "");
-        properties.put(XmlModel.PROPERTY_XSD_FILE, xmlModelContext.getXsdFile() + "");
+        properties.put(XmlModel.PROPERTY_XSD_FILE, xsd + "");
 
         String metamodelUri = xmlModelContext.getMetaModelUris().stream().collect(joining(","));
         //File modelFile = emfModel.getModelFile();
