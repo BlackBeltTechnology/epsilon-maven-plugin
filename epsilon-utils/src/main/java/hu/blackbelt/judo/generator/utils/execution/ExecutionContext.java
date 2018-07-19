@@ -156,6 +156,9 @@ public class ExecutionContext implements AutoCloseable {
 
     @SneakyThrows
     private void executeModule(IEolExecutableModule eolModule, URI source, List<Variable> parameters) {
+        for (IModel m : projectModelRepository.getModels()) {
+            log.info("  Model: " + m.getName() + " Aliases: " + String.join(", ", m.getAliases()));
+        }
         eolModule.parse(source);
         if (profile) {
             Profiler.INSTANCE.reset();

@@ -1,5 +1,6 @@
 package hu.blackbelt.judo.generator.utils.execution.model.excel;
 
+import com.google.common.base.Strings;
 import hu.blackbelt.judo.generator.utils.execution.Log;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -28,9 +29,11 @@ public class ExcelModelUtil {
         }
         properties.put(ExcelModel.PROPERTY_READONLOAD, excelModelContext.isReadOnLoad()+ "");
         properties.put(ExcelModel.PROPERTY_STOREONDISPOSAL, excelModelContext.isStoreOnDisposal() + "");
-        properties.put(ExcelModel.SPREADSHEET_PASSWORD, excelModelContext.getSpreadSheetPassword() + "");
-        properties.put(ExcelModel.SPREADSHEET_FILE, excelFile + "");
-        properties.put(ExcelModel.CONFIGURATION_FILE, excelConfigurationFile + "");
+        if (!Strings.isNullOrEmpty(excelModelContext.getSpreadSheetPassword())) {
+            properties.put(ExcelModel.SPREADSHEET_PASSWORD, excelModelContext.getSpreadSheetPassword() + "");
+        }
+        properties.put(ExcelModel.SPREADSHEET_FILE, excelFile.toFileString() + "");
+        properties.put(ExcelModel.CONFIGURATION_FILE, excelConfigurationFile.toFileString() + "");
 
 
 
