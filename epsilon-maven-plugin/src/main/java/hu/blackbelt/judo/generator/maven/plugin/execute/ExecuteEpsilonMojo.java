@@ -58,7 +58,7 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
             eolPrograms.stream().forEach(p -> { executionContext.executeProgram(p.toExecutionContext()); });
             executionContext.commit();
         } catch (Exception e) {
-            log.error("Error", e);
+            throw new MojoExecutionException("Execution error: " + e.toString(), e);
         }
     }
 }
