@@ -156,6 +156,9 @@ public class ExecutionContext implements AutoCloseable {
 
     @SneakyThrows
     private void executeModule(IEolExecutableModule eolModule, URI source, List<Variable> parameters) {
+        for (IModel m : projectModelRepository.getModels()) {
+            log.info("  Model: " + m.getName() + " Aliases: " + String.join(", ", m.getAliases()));
+        }
         eolModule.parse(source);
         if (profile) {
             Profiler.INSTANCE.reset();
@@ -230,9 +233,12 @@ public class ExecutionContext implements AutoCloseable {
     @SneakyThrows
     public void addModel(ModelContext modelContext) {
         log.info("Model: " + modelContext.toString());
-        org.eclipse.emf.common.util.URI artifactFile = artifactResolver.getArtifactAsEclipseURI(modelContext.getArtifact());
-        log.info("    Artifact file: : " + artifactFile.toString());
-        modelContextMap.put(modelContext, modelContext.load(log, resourceSet, projectModelRepository, artifactFile));
+        Map<String, org.eclipse.emf.common.util.URI> uris = modelContext.getArtifacts().entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey(),
+                        entry -> artifactResolver.getArtifactAsEclipseURI(entry.getValue())));
+        uris.forEach((k,v) -> log.info("    Artifact " + k + " file: " + v.toString()));
+        modelContextMap.put(modelContext, modelContext.load(log, resourceSet, projectModelRepository, uris));
     }
 
 

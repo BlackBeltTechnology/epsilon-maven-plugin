@@ -123,8 +123,15 @@
                     <groupId>org.eclipse.emf.mapping</groupId>
                     <artifactId>ecore2xml</artifactId>
                 </exclusion>
-
             </exclusions>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.eclipse.epsilon/epsilon-spreadsheets -->
+        <dependency>
+            <groupId>org.eclipse.epsilon</groupId>
+            <artifactId>epsilon-spreadsheets</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
     </dependencies>
 </project>

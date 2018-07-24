@@ -38,6 +38,9 @@ public abstract class AbstractEpsilonMojo extends AbstractMojo {
     @Parameter(readonly = true)
     public List<XmlModel> xmlModels;
 
+    @Parameter(readonly = true)
+    public List<ExcelModel> excelModels;
+
     public Log log = new MavenLog(getLog());
 
     static {

@@ -39,6 +39,10 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
         if (plainXmlModels != null) {
             modelContexts.addAll(plainXmlModels.stream().map(m -> m.toModelContext()).collect(Collectors.toList()));
         }
+        if (excelModels != null) {
+            modelContexts.addAll(excelModels.stream().map(m -> m.toModelContext()).collect(Collectors.toList()));
+        }
+
 
         try (ExecutionContext executionContext = ExecutionContext.builder()
                 .metaModels(metaModels)

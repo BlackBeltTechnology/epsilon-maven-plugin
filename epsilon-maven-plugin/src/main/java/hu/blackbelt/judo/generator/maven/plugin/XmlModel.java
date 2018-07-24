@@ -1,6 +1,8 @@
 package hu.blackbelt.judo.generator.maven.plugin;
 
+import com.google.common.collect.ImmutableMap;
 import hu.blackbelt.judo.generator.utils.execution.model.emf.EmfModelContext;
+import hu.blackbelt.judo.generator.utils.execution.model.xml.XmlModelContext;
 import lombok.Data;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eclipse.emf.common.util.URI;
@@ -115,9 +117,9 @@ public class XmlModel {
     }
 
     public EmfModelContext toModelContext() {
-        return EmfModelContext.builder()
+        return XmlModelContext.builder()
                 .aliases(aliases)
-                .artifact(artifact)
+                .artifacts(ImmutableMap.of("xml", artifact, "xsd", xsd))
                 .cached(cached)
                 .expand(expand)
                 .fileBasedMetamodelUris(fileBasedMetamodelUris)
