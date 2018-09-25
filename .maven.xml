@@ -23,22 +23,7 @@
             <username>${env.BLACKBELT_NEXUS_USERNAME}</username>
             <password>${env.BLACKBELT_NEXUS_PASSWORD}</password>
         </server>
-
-        <server>
-            <id>blackbelt-nexus-mirror</id>
-            <username>${env.BLACKBELT_NEXUS_USERNAME}</username>
-            <password>${env.BLACKBELT_NEXUS_PASSWORD}</password>
-        </server>
     </servers>
-
-    <mirrors>
-        <mirror>
-            <id>blackbelt-nexus-mirror</id>
-            <name>blackbelt-nexus-mirror</name>
-            <url>https://nexus.blackbelt.cloud/repository/maven</url>
-            <mirrorOf>central</mirrorOf>
-        </mirror>
-    </mirrors>
 
     <profiles>
         <profile>
@@ -53,7 +38,6 @@
             </properties>
         </profile>
     </profiles>
-
 
     <pluginGroups>
         <pluginGroup>com.amashchenko.maven.plugin</pluginGroup>
