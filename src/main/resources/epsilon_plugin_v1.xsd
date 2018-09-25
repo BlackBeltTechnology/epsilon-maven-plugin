@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema version="1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           xmlns="http://epsilon.blackbelt.hu/maven/plugin/v1/xml/ns/definition"
+           targetNamespace="http://epsilon.blackbelt.hu/maven/plugin/v1/xml/ns/definition">
+
+    <xs:element name="configuration" type="ConfigurationType"/>
+
+    <xs:complexType name="ConfigurationType">
+        <xs:annotation>
+            <xs:documentation>Epsilon Maven plugin configuration type.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="metaModels" type="MetaModelsType" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="MetaModelsType">
+        <xs:annotation>
+            <xs:documentation>List of metamodels.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="metaModel" type="xs:string" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>A metamodel reference that can be either a relative/absolute file path or a Maven
+                        artifact (URL syntax: https://ops4j1.jira.com/wiki/spaces/paxurl/pages/3833866/Mvn+Protocol).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
