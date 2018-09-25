@@ -13,21 +13,172 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element name="metaModels" type="MetaModelsType" minOccurs="0"/>
+            <xs:element name="models" type="ModelsType"/>
+            <xs:element name="eolPrograms" type="EolProgramsType"/>
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="MetaModelsType">
         <xs:annotation>
-            <xs:documentation>List of metamodels.</xs:documentation>
+            <xs:documentation>List of metamodels. A metamodel reference that can be either a relative/absolute file path
+                or a Maven
+                artifact (URL syntax: https://ops4j1.jira.com/wiki/spaces/paxurl/pages/3833866/Mvn+Protocol).
+            </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="metaModel" type="xs:string" maxOccurs="unbounded">
-                <xs:annotation>
-                    <xs:documentation>A metamodel reference that can be either a relative/absolute file path or a Maven
-                        artifact (URL syntax: https://ops4j1.jira.com/wiki/spaces/paxurl/pages/3833866/Mvn+Protocol).
-                    </xs:documentation>
-                </xs:annotation>
+            <xs:element name="metaModel" type="xs:string" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ModelsType">
+        <xs:annotation>
+            <xs:documentation>List of models.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="model" type="ModelType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ModelType">
+        <xs:annotation>
+            <xs:documentation>Model data type.</xs:documentation>
+        </xs:annotation>
+    </xs:complexType>
+
+    <xs:complexType name="EolProgramsType">
+        <xs:annotation>
+            <xs:documentation>EOL programs.</xs:documentation>
+        </xs:annotation>
+        <xs:choice maxOccurs="unbounded">
+            <xs:sequence>
+                <xs:element name="Ecl" type="EclType"/>
+            </xs:sequence>
+            <xs:sequence>
+                <xs:element name="Egl" type="EglType"/>
+            </xs:sequence>
+            <xs:sequence>
+                <xs:element name="Egx" type="EgxType"/>
+            </xs:sequence>
+            <xs:sequence>
+                <xs:element name="Eml" type="EmlType"/>
+            </xs:sequence>
+            <!--xs:sequence>
+                <xs:element name="Eol" type="EolType"/>
+            </xs:sequence-->
+            <xs:sequence>
+                <xs:element name="Etl" type="EtlType"/>
+            </xs:sequence>
+            <xs:sequence>
+                <xs:element name="Evl" type="EvlType"/>
+            </xs:sequence>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="EolType">
+        <xs:annotation>
+            <xs:documentation>EOL program definition</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="source" type="xs:string"/>
+            <xs:element name="parameters" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="parameter" type="EolProgramParameterType" minOccurs="1"/>
+                    </xs:sequence>
+                </xs:complexType>
             </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="EclType">
+        <xs:annotation>
+            <xs:documentation>ECL program definition.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="EolType">
+                <xs:sequence>
+                    <xs:element name="exportMatchTrace" type="xs:string" minOccurs="0"/>
+                    <xs:element name="useMatchTrace" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="EglType">
+        <xs:annotation>
+            <xs:documentation>EGL program definition.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="EolType">
+                <xs:sequence>
+                    <xs:element name="outputRoot" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="EgxType">
+        <xs:annotation>
+            <xs:documentation>EGX program definition.</xs:documentation>
+        </xs:annotation>
+    </xs:complexType>
+
+    <xs:complexType name="EmlType">
+        <xs:annotation>
+            <xs:documentation>EML program definition.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="EolType">
+                <xs:sequence>
+                    <xs:element name="useMatchTrace" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="EtlType">
+        <xs:annotation>
+            <xs:documentation>ETL program definition.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="EolType">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="EvlType">
+        <xs:annotation>
+            <xs:documentation>EVL program definition.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="EolType">
+                <xs:sequence>
+                    <xs:element name="expectedErrors" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="expectedError" type="xs:string" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="expectedWarnings" minOccurs="0">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="expectedWarning" type="xs:string" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="EolProgramParameterType">
+        <xs:annotation>
+            <xs:documentation>EOL program parameter.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="value" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>
