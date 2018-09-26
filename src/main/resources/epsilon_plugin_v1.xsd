@@ -12,30 +12,62 @@
             <xs:documentation>Epsilon Maven plugin configuration type.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="metaModels" type="MetaModelsType" minOccurs="0"/>
-            <xs:element name="models" type="ModelsType"/>
+            <xs:element name="metaModels" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        List of metamodels. A metamodel reference that can be either a relative/absolute file path or a
+                        Maven artifact (URL syntax:
+                        https://ops4j1.jira.com/wiki/spaces/paxurl/pages/3833866/Mvn+Protocol).
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="metaModel" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="models" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>List of models.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="model" type="ModelType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="xmlModels" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>List of XML models.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="xmlModel" type="XmlModelType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="plainXmlModels" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>List of plain XML models.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="plainXmlModel" type="PlainXmlModelType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="excelModels" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>List of Excel models.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="excelModel" type="ExcelModelType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="eolPrograms" type="EolProgramsType"/>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="MetaModelsType">
-        <xs:annotation>
-            <xs:documentation>List of metamodels. A metamodel reference that can be either a relative/absolute file path
-                or a Maven
-                artifact (URL syntax: https://ops4j1.jira.com/wiki/spaces/paxurl/pages/3833866/Mvn+Protocol).
-            </xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="metaModel" type="xs:string" maxOccurs="unbounded"/>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="ModelsType">
-        <xs:annotation>
-            <xs:documentation>List of models.</xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="model" type="ModelType" maxOccurs="unbounded"/>
+            <xs:element name="profile" type="xs:boolean" minOccurs="0" default="false"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -43,6 +75,226 @@
         <xs:annotation>
             <xs:documentation>Model data type.</xs:documentation>
         </xs:annotation>
+        <xs:sequence>
+            <xs:element name="artifact" type="xs:string"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="aliases" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="alias" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="readOnLoad" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="storeOnDisposal" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="cached" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="platformAlias" type="xs:string" minOccurs="0"/>
+            <xs:element name="metaModelFile" type="xs:string" minOccurs="0"/>
+            <xs:element name="expand" type="xs:boolean" minOccurs="0" default="true">
+                <xs:annotation>
+                    <xs:documentation>
+                        One of the keys used to construct the first argument to {@link
+                        org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
+
+                        When paired with "true", external references will be resolved during loading.
+                        Otherwise, external references are not resolved.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="metaModelUris" minOccurs="0">
+                <xs:complexType>
+                    <xs:annotation>
+                        <xs:documentation>
+                            One of the keys used to construct the first argument to {@link
+                            org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
+
+                            This key is a comma-separated list of zero or more namespaces URI of some of the metamodels
+                            to which this model conforms. Users may combine this key with to loadEmf
+                            "fileBasedMetamodelUris" both file-based and URI-based metamodels at the same time.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:sequence>
+                        <xs:element name="param" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="fileBasedMetamodelUris" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        One of the keys used to construct the first argument to {@link
+                        org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
+
+                        This key is a comma-separated list of zero or more {@link URI}s that can be used to locate some
+                        of the metamodels to which this model conforms. Users may combine this key with "metaModelUris"
+                        to loadEmf both file-based and URI-based metamodels at the same time.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="fileBasedMetamodelUri" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="modelUri" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        One of the keys used to construct the first argument to {@link
+                        org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
+
+                        This key is paired with a {@link URI} that can be used to locate this model.
+                        This key must always be paired with a value.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reuseUnmodifiedFileBasedMetamodels" type="xs:boolean" minOccurs="0" default="true">
+                <xs:annotation>
+                    <xs:documentation>
+                        One of the keys used to construct the first argument to
+                        {@link org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
+
+                        This key is a Boolean value that if set to <code>true</code> (the default), tries to reuse
+                        previously registered file-based EPackages that have not been modified since the last time they
+                        were registered.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="PlainXmlModelType">
+        <xs:annotation>
+            <xs:documentation>Plain XML model data type.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="artifact" type="xs:string"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="aliases" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="alias" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="readOnLoad" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="storeOnDisposal" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="cached" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="platformAlias" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="XmlModelType">
+        <xs:annotation>
+            <xs:documentation>XML model data type.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="artifact" type="xs:string"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="aliases" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="alias" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="readOnLoad" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="storeOnDisposal" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="cached" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="platformAlias" type="xs:string" minOccurs="0"/>
+            <xs:element name="metaModelFile" type="xs:string" minOccurs="0"/>
+            <xs:element name="xsd" type="xs:string" minOccurs="0"/>
+            <xs:element name="expand" type="xs:boolean" minOccurs="0" default="true">
+                <xs:annotation>
+                    <xs:documentation>
+                        One of the keys used to construct the first argument to {@link
+                        org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
+
+                        When paired with "true", external references will be resolved during loading.
+                        Otherwise, external references are not resolved.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="metaModelUris" minOccurs="0">
+                <xs:complexType>
+                    <xs:annotation>
+                        <xs:documentation>
+                            One of the keys used to construct the first argument to {@link
+                            org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
+
+                            This key is a comma-separated list of zero or more namespaces URI of some of the metamodels
+                            to which this model conforms. Users may combine this key with to loadEmf
+                            "fileBasedMetamodelUris" both file-based and URI-based metamodels at the same time.
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:sequence>
+                        <xs:element name="param" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="fileBasedMetamodelUris" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        One of the keys used to construct the first argument to {@link
+                        org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
+
+                        This key is a comma-separated list of zero or more {@link URI}s that can be used to locate some
+                        of the metamodels to which this model conforms. Users may combine this key with "metaModelUris"
+                        to loadEmf both file-based and URI-based metamodels at the same time.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="fileBasedMetamodelUri" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="modelUri" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        One of the keys used to construct the first argument to {@link
+                        org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
+
+                        This key is paired with a {@link URI} that can be used to locate this model.
+                        This key must always be paired with a value.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reuseUnmodifiedFileBasedMetamodels" type="xs:boolean" minOccurs="0" default="true">
+                <xs:annotation>
+                    <xs:documentation>
+                        One of the keys used to construct the first argument to
+                        {@link org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
+
+                        This key is a Boolean value that if set to <code>true</code> (the default), tries to reuse
+                        previously registered file-based EPackages that have not been modified since the last time they
+                        were registered.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ExcelModelType">
+        <xs:annotation>
+            <xs:documentation>Excel model data type.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="artifact" type="xs:string"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="aliases" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="alias" type="xs:string" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="readOnLoad" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="storeOnDisposal" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="cached" type="xs:boolean" minOccurs="0" default="true"/>
+            <xs:element name="platformAlias" type="xs:string" minOccurs="0"/>
+            <xs:element name="metaModelFile" type="xs:string" minOccurs="0"/>
+            <xs:element name="configurationArtifact" type="xs:string"/>
+            <xs:element name="spreadSheetPassword" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="EolProgramsType">
@@ -62,9 +314,9 @@
             <xs:sequence>
                 <xs:element name="Eml" type="EmlType"/>
             </xs:sequence>
-            <!--xs:sequence>
+            <xs:sequence>
                 <xs:element name="Eol" type="EolType"/>
-            </xs:sequence-->
+            </xs:sequence>
             <xs:sequence>
                 <xs:element name="Etl" type="EtlType"/>
             </xs:sequence>
@@ -83,7 +335,7 @@
             <xs:element name="parameters" minOccurs="0">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="parameter" type="EolProgramParameterType" minOccurs="1"/>
+                        <xs:element name="parameter" type="EolProgramParameterType" maxOccurs="unbounded"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -121,6 +373,9 @@
         <xs:annotation>
             <xs:documentation>EGX program definition.</xs:documentation>
         </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="EglType"/>
+        </xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="EmlType">

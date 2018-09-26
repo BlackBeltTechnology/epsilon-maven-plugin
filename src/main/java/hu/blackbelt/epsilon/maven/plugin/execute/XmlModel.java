@@ -1,7 +1,8 @@
-package hu.blackbelt.epsilon.maven.plugin;
+package hu.blackbelt.epsilon.maven.plugin.execute;
 
 import com.google.common.collect.ImmutableMap;
 import hu.blackbelt.epsilon.runtime.execution.model.emf.EmfModelContext;
+import hu.blackbelt.epsilon.runtime.execution.model.xml.XmlModelContext;
 import lombok.Data;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eclipse.emf.common.util.URI;
@@ -11,7 +12,7 @@ import java.io.File;
 import java.util.List;
 
 @Data
-public class Model {
+public class XmlModel {
 
     @Parameter(name = "artifact", readonly = true, required = true)
     String artifact;
@@ -36,6 +37,9 @@ public class Model {
 
     @Parameter(name = "platformAlias", readonly = true)
     String platformAlias;
+
+    @Parameter(name = "xsd", readonly = true)
+    String xsd;
 
     /**
      * One of the keys used to construct the first argument to {@link org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
@@ -92,6 +96,7 @@ public class Model {
     boolean reuseUnmodifiedFileBasedMetamodels;
 
 
+
     @Override
     public String toString() {
         return "Model{" +
@@ -112,9 +117,9 @@ public class Model {
     }
 
     public EmfModelContext toModelContext() {
-        return EmfModelContext.builder()
+        return XmlModelContext.builder()
                 .aliases(aliases)
-                .artifacts(ImmutableMap.of("model", artifact))
+                .artifacts(ImmutableMap.of("xml", artifact, "xsd", xsd))
                 .cached(cached)
                 .expand(expand)
                 .fileBasedMetamodelUris(fileBasedMetamodelUris)
