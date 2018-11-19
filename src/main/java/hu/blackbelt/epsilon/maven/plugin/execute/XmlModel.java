@@ -95,6 +95,11 @@ public class XmlModel {
     @Parameter(name = "reuseUnmodifiedFileBasedMetamodels", defaultValue = "true", readonly = true)
     boolean reuseUnmodifiedFileBasedMetamodels;
 
+    /**
+     * Validate model against Ecore metamodel and fail on validation errors.
+     */
+    @Parameter(name = "validateModel", defaultValue = "true", readonly = true)
+    boolean validateModel;
 
 
     @Override
@@ -113,6 +118,7 @@ public class XmlModel {
                 ", fileBasedMetamodelUris=" + fileBasedMetamodelUris +
                 ", modelUri='" + modelUri + '\'' +
                 ", reuseUnmodifiedFileBasedMetamodels=" + reuseUnmodifiedFileBasedMetamodels +
+                ", validateModel='" + validateModel + '\'' +
                 '}';
     }
 
@@ -131,6 +137,7 @@ public class XmlModel {
                 .readOnLoad(readOnLoad)
                 .reuseUnmodifiedFileBasedMetamodels(reuseUnmodifiedFileBasedMetamodels)
                 .storeOnDisposal(storeOnDisposal)
+                .validateModel(validateModel)
                 .build();
     }
 }

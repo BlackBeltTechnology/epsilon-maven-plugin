@@ -90,6 +90,12 @@ public class Model {
     @Parameter(name = "reuseUnmodifiedFileBasedMetamodels", defaultValue = "true", readonly = true)
     boolean reuseUnmodifiedFileBasedMetamodels;
 
+    /**
+     * Validate model against Ecore metamodel and fail on validation errors.
+     */
+    @Parameter(name = "validateModel", defaultValue = "true", readonly = true)
+    boolean validateModel;
+
 
     @Override
     public String toString() {
@@ -107,6 +113,7 @@ public class Model {
                 ", fileBasedMetamodelUris=" + fileBasedMetamodelUris +
                 ", modelUri='" + modelUri + '\'' +
                 ", reuseUnmodifiedFileBasedMetamodels=" + reuseUnmodifiedFileBasedMetamodels +
+                ", validateModel='" + validateModel + '\'' +
                 '}';
     }
 
@@ -125,6 +132,7 @@ public class Model {
                 .readOnLoad(readOnLoad)
                 .reuseUnmodifiedFileBasedMetamodels(reuseUnmodifiedFileBasedMetamodels)
                 .storeOnDisposal(storeOnDisposal)
+                .validateModel(validateModel)
                 .build();
     }
 }

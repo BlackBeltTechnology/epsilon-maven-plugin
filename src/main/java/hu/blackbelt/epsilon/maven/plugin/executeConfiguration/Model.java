@@ -30,6 +30,7 @@ public class Model {
                 .readOnLoad(model.isReadOnLoad() != null ? model.isReadOnLoad() : true)
                 .reuseUnmodifiedFileBasedMetamodels(model.isReuseUnmodifiedFileBasedMetamodels() != null ? model.isReuseUnmodifiedFileBasedMetamodels() : true)
                 .storeOnDisposal(model.isStoreOnDisposal() != null ? model.isStoreOnDisposal() : true)
+                .validateModel(model.isValidateModel() != null ? model.isValidateModel() : true)
                 .build();
     }
 }
