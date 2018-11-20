@@ -1,7 +1,7 @@
 package hu.blackbelt.epsilon.maven.plugin.parsehutn;
 
 import hu.blackbelt.epsilon.runtime.execution.ExecutionContext;
-import hu.blackbelt.epsilon.maven.plugin.AbstractEpsilonMojo;
+import hu.blackbelt.epsilon.maven.plugin.execute.AbstractEpsilonMojo;
 import hu.blackbelt.epsilon.maven.plugin.MavenArtifactResolver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;

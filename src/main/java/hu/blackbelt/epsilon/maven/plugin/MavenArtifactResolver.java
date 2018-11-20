@@ -28,27 +28,33 @@ public class MavenArtifactResolver implements ArtifactResolver {
     private List<RemoteRepository> repositories;
     private RepositorySystemSession repoSession;
     private Log log;
+    private File sourceDirectory;
 
-    protected File getArtifact(String url) throws MojoExecutionException {
+    public File getArtifact(String url) throws MojoExecutionException {
+        final File file;
         if (url.startsWith("mvn:")) {
-            Artifact artifact = new DefaultArtifact(url.toString().substring(4));
+            Artifact artifact = new DefaultArtifact(url.substring(4));
             ArtifactRequest req = new ArtifactRequest().setRepositories(this.repositories).setArtifact(artifact);
             ArtifactResult resolutionResult;
             try {
                 resolutionResult = this.repoSystem.resolveArtifact(this.repoSession, req);
 
             } catch (ArtifactResolutionException e) {
-                throw new MojoExecutionException("Artifact " + url.toString() + " could not be resolved.", e);
+                throw new MojoExecutionException("Artifact " + url + " could not be resolved.", e);
             }
 
             // The file should exists, but we never know.
-            File file = resolutionResult.getArtifact().getFile();
-            if (file == null || !file.exists()) {
-                log.warn("Artifact " + url.toString() + " has no attached file. Its content will not be copied in the target model directory.");
-            }
-            return file;
+            file = resolutionResult.getArtifact().getFile();
+        } else {
+            File sourceFile = new File(url);
+            file = sourceFile.isAbsolute() ? sourceFile : new File(sourceDirectory, url);
         }
-        throw new MojoExecutionException("Artifact " + url.toString() + " could not be resolved.");
+
+        if (file == null || !file.exists()) {
+            log.warn("Artifact " + url + " has no attached file. Its content will not be copied in the target model directory.");
+        }
+
+        return file;
     }
 
     @Override
@@ -64,8 +70,7 @@ public class MavenArtifactResolver implements ArtifactResolver {
     }
 
     private boolean isValidURL(String url) {
-
-        URL u = null;
+        URL u;
 
         try {
             u = new URL(url);

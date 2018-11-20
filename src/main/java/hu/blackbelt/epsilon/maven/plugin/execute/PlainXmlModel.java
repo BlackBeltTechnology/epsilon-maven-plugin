@@ -1,25 +1,17 @@
-package hu.blackbelt.epsilon.maven.plugin;
+package hu.blackbelt.epsilon.maven.plugin.execute;
 
 import com.google.common.collect.ImmutableMap;
-import hu.blackbelt.epsilon.runtime.execution.model.excel.ExcelModelContext;
+import hu.blackbelt.epsilon.runtime.execution.model.plainxml.PlainXmlModelContext;
 import lombok.Data;
 import org.apache.maven.plugins.annotations.Parameter;
 
-import java.io.File;
 import java.util.List;
 
 @Data
-public class ExcelModel {
+public class PlainXmlModel {
 
     @Parameter(name = "artifact", readonly = true, required = true)
     String artifact;
-
-    @Parameter(name = "configurationArtifact", readonly = true, required = true)
-    String configurationArtifact;
-
-    @Parameter(name = "spreadSheetPassword", readonly = true, required = false)
-    String spreadSheetPassword;
-
 
     @Parameter(name = "name", required = true, readonly = true)
     String name;
@@ -36,37 +28,32 @@ public class ExcelModel {
     @Parameter(name = "cached", defaultValue = "true", readonly = true)
     boolean cached = true;
 
-    @Parameter(name = "metaModelFile", readonly = true)
-    File metaModelFile;
-
     @Parameter(name = "platformAlias", readonly = true)
     String platformAlias;
 
-
     @Override
     public String toString() {
-        return "ExcelModel{" +
+        return "PlainXmlModel{" +
                 "artifact='" + artifact + '\'' +
-                "configurationArtifact='" + configurationArtifact + '\'' +
                 ", name='" + name + '\'' +
                 ", aliases=" + aliases +
                 ", readOnLoad=" + readOnLoad +
                 ", storeOnDisposal=" + storeOnDisposal +
                 ", cached=" + cached +
-                ", metaModelFile=" + metaModelFile +
                 ", platformAlias='" + platformAlias + '\'' +
                 '}';
     }
 
-    public ExcelModelContext toModelContext() {
-        return ExcelModelContext.builder()
+    public PlainXmlModelContext toModelContext() {
+        return PlainXmlModelContext.builder()
                 .aliases(aliases)
-                .artifacts(ImmutableMap.of("excelSheet", artifact, "excelConfiguration", configurationArtifact))
+                .artifacts(ImmutableMap.of("xml", artifact))
                 .cached(cached)
                 .name(name)
+                .platformAlias(platformAlias)
                 .readOnLoad(readOnLoad)
                 .storeOnDisposal(storeOnDisposal)
-                .spreadSheetPassword(spreadSheetPassword)
                 .build();
     }
+
 }
