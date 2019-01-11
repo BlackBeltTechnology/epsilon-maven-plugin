@@ -1,6 +1,6 @@
 <settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-          xsi:schemalocation="http://maven.apache.org/SETTINGS/1.0.0
-                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    xsi:schemalocation="http://maven.apache.org/SETTINGS/1.0.0
+    http://maven.apache.org/xsd/settings-1.0.0.xsd">
     <servers>
         <server>
             <!-- Maven Central Deployment -->
@@ -12,19 +12,26 @@
             <id>${env.GPG_KEYNAME}</id>
             <passphrase>${env.GPG_PASSPHRASE}</passphrase>
         </server>
-
+        
         <server>
             <id>github</id>
             <privateKey>${env.GITHUB_ACCESS_TOKEN}</privateKey>
         </server>
-
+        
         <server>
             <id>blackbelt-nexus-distribution</id>
             <username>${env.BLACKBELT_NEXUS_USERNAME}</username>
             <password>${env.BLACKBELT_NEXUS_PASSWORD}</password>
         </server>
+        
+        <server>
+            <id>blackbelt-nexus-repository</id>
+            <username>${env.BLACKBELT_NEXUS_USERNAME}</username>
+            <password>${env.BLACKBELT_NEXUS_PASSWORD}</password>
+        </server>
+        
     </servers>
-
+    
     <profiles>
         <profile>
             <id>ossrh</id>
@@ -37,8 +44,35 @@
                 <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
             </properties>
         </profile>
+        
+        <profile>
+            <id>blackbelt-repository</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            
+            <repositories>
+                <repository>
+                    <id>blackbelt-nexus-repository</id>
+                    <name>Blackbelt repository</name>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                        <checksumPolicy>warn</checksumPolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                        <checksumPolicy>fail</checksumPolicy>
+                    </snapshots>
+                    <url>https://nexus.blackbelt.cloud/repository/maven</url>
+                    <layout>default</layout>
+                </repository>
+            </repositories>
+        </profile>
+        
     </profiles>
-
+    
     <pluginGroups>
         <pluginGroup>com.amashchenko.maven.plugin</pluginGroup>
     </pluginGroups>
