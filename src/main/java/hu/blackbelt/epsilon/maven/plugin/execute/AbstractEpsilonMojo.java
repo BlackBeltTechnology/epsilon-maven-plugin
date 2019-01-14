@@ -1,5 +1,6 @@
-package hu.blackbelt.epsilon.maven.plugin;
+package hu.blackbelt.epsilon.maven.plugin.execute;
 
+import hu.blackbelt.epsilon.maven.plugin.MavenLog;
 import hu.blackbelt.epsilon.runtime.execution.Log;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Component;

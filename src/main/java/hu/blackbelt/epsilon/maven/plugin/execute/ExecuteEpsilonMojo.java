@@ -2,7 +2,6 @@ package hu.blackbelt.epsilon.maven.plugin.execute;
 
 import com.google.common.collect.Lists;
 import hu.blackbelt.epsilon.runtime.execution.ExecutionContext;
-import hu.blackbelt.epsilon.maven.plugin.AbstractEpsilonMojo;
 import hu.blackbelt.epsilon.maven.plugin.MavenArtifactResolver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -23,9 +22,8 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
     @Parameter(name = "profile", readonly = true, required = false)
     public Boolean profile = false;
 
-    @Parameter(name = "sourceDirectory", defaultValue = "${baseDir}", readonly = true)
+    @Parameter(name = "sourceDirectory", defaultValue = "${basedir}", readonly = true)
     public File sourceDirectory;
-
 
     synchronized public void execute() throws MojoExecutionException, MojoFailureException {
         List modelContexts = Lists.newArrayList();
