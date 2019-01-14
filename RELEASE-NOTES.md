@@ -1,4 +1,4 @@
-## epsilon-runtime 1.1.2
+## epsilon-maven-plugin 1.1.2
 
 ### ChangeLog
 
