@@ -5,7 +5,7 @@ command-timeout: 60
 build:
   steps:	
    
-    - blackbelttechnology/version-from-git-tag@1.0.4
+    - blackbelttechnology/version-from-git-tag@1.0.5
  
     - blackbelttechnology/version-from-pom@1.0.2:
       pom: ./pom.xml
@@ -18,7 +18,7 @@ build:
     - wercker/maven:
       goals: clean deploy
       settings: .maven.xml
-      profiles: release-github,release-blackbelt
+      profiles: release-github,release-blackbelt,blackbelt-repository
       cache_repo: true
 
 #  after-steps:
