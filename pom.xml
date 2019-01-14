@@ -44,8 +44,7 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <epsilon-runtime-version>1.1.5_feature__9_UpdateEpsilonTo_1_5_1-53</epsilon-runtime-version>
+        <epsilon-runtime-version>1.1.5</epsilon-runtime-version>
     </properties>
     <build>
         <plugins>
