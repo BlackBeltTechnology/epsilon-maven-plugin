@@ -404,6 +404,9 @@
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="EolType">
+                <xs:sequence>
+                    <xs:element name="exportTransformationTrace" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
