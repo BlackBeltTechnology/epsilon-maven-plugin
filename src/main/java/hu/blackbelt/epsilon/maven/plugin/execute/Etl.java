@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 public class Etl extends Eol {
 
-    @Parameter(name = "exportTransformationState", readonly = false, required = true)
-    String exportTransformationState;
+    @Parameter(name = "exportTransformationTrace", readonly = false, required = true)
+    String exportTransformationTrace;
 
 
     @Override
@@ -19,7 +19,7 @@ public class Etl extends Eol {
                 .parameters(parameters.stream()
                         .map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
                         .collect(Collectors.toList()))
-                .exportTransformationTrace(exportTransformationState)
+                .exportTransformationTrace(exportTransformationTrace)
                 .source(source)
                 .build();
     }
