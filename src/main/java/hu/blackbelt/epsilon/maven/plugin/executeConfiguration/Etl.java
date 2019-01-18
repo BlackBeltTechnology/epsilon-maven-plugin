@@ -18,6 +18,7 @@ public class Etl {
                 .parameters(etl.getParameters() != null ? etl.getParameters().getParameter().stream()
                         .map(p -> ProgramParameter.builder().name(p.getName()).value(p.getValue()).build())
                         .collect(Collectors.toList()) : Collections.emptyList())
+                .exportTransformationTrace(etl.getExportTransformationTrace())
                 .source(etl.getSource())
                 .build();
     }
