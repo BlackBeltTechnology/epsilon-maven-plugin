@@ -123,7 +123,7 @@ public class XmlModel {
     }
 
     public EmfModelContext toModelContext() {
-        return XmlModelContext.builder()
+        return XmlModelContext.buildXmlModelContext()
                 .aliases(aliases)
                 .artifacts(ImmutableMap.of("xml", artifact, "xsd", xsd))
                 .cached(cached)
