@@ -1,11 +1,10 @@
 package hu.blackbelt.epsilon.maven.plugin.executeConfiguration;
 
 import com.google.common.collect.Lists;
-import hu.blackbelt.epsilon.maven.plugin.MavenArtifactResolver;
 import hu.blackbelt.epsilon.maven.plugin.MavenLog;
 import hu.blackbelt.epsilon.maven.plugin.v1.xml.ns.definition.*;
 import hu.blackbelt.epsilon.runtime.execution.ExecutionContext;
-import hu.blackbelt.epsilon.runtime.execution.Log;
+import hu.blackbelt.epsilon.runtime.execution.api.Log;
 import hu.blackbelt.epsilon.runtime.execution.contexts.EolExecutionContext;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -30,6 +29,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static hu.blackbelt.epsilon.runtime.execution.ExecutionContext.executionContextBuilder;
 
 @Mojo(name = "executeConfiguration", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
@@ -129,21 +130,24 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
                     modelContexts.addAll(configuration.getExcelModels().getExcelModel().stream().map(m -> new ExcelModel(m).toModelContext()).collect(Collectors.toList()));
                 }
 
-                try (ExecutionContext executionContext = ExecutionContext.builder()
-                        .metaModels(configuration.getMetaModels().getMetaModel())
-                        .modelContexts(modelContexts)
-                        .artifactResolver(MavenArtifactResolver.builder()
+                /*
+                                        .artifactResolver(MavenArtifactResolver.builder()
                                 .repoSession(repoSession)
                                 .repositories(repositories)
                                 .repoSystem(repoSystem)
                                 .log(log)
                                 .build())
+
+                 */
+                try (ExecutionContext executionContext = executionContextBuilder()
+                        .metaModels(configuration.getMetaModels().getMetaModel())
+                        .modelContexts(modelContexts)
                         .profile(configuration.isProfile() != null ? configuration.isProfile() : false)
                         .sourceDirectory(sourceDirectory)
                         .log(log)
                         .build()) {
 
-                    executionContext.init();
+                    executionContext.load();
                     configuration.getEolPrograms().getEclOrEglOrEgx().forEach(prg -> {
                         final EolExecutionContext eolExecutionContext;
                         if (prg instanceof EclType) {

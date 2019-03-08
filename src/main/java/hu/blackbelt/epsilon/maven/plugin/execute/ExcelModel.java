@@ -8,6 +8,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.File;
 import java.util.List;
 
+import static hu.blackbelt.epsilon.runtime.execution.model.excel.ExcelModelContext.excelModelContextBuilder;
+
 @Data
 public class ExcelModel {
 
@@ -38,7 +40,7 @@ public class ExcelModel {
     @Parameter(name = "metaModelFile", readonly = true)
     File metaModelFile;
 
-    @Parameter(name = "platformAlias", readonly = true)
+    @Parameter(name = "referenceUri", readonly = true)
     String platformAlias;
 
 
@@ -53,14 +55,15 @@ public class ExcelModel {
                 ", storeOnDisposal=" + storeOnDisposal +
                 ", cached=" + cached +
                 ", metaModelFile=" + metaModelFile +
-                ", platformAlias='" + platformAlias + '\'' +
+                ", referenceUri='" + platformAlias + '\'' +
                 '}';
     }
 
     public ExcelModelContext toModelContext() {
-        return ExcelModelContext.builder()
+        return excelModelContextBuilder()
                 .aliases(aliases)
-                .artifacts(ImmutableMap.of("excelSheet", artifact, "excelConfiguration", configurationArtifact))
+                .excelSheet(artifact)
+                .excelConfiguration(configurationArtifact)
                 .cached(cached)
                 .name(name)
                 .readOnLoad(readOnLoad)

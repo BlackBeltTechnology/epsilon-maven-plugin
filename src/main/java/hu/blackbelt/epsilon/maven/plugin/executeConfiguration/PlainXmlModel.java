@@ -15,12 +15,11 @@ public class PlainXmlModel {
     }
 
     public PlainXmlModelContext toModelContext() {
-        return PlainXmlModelContext.builder()
+        return PlainXmlModelContext.plainXmlModelContextBuilder()
                 .aliases(plainXmlModel.getAliases() != null ? plainXmlModel.getAliases().getAlias() : Collections.emptyList())
-                .artifacts(ImmutableMap.of("xml", plainXmlModel.getArtifact()))
+                .xml(plainXmlModel.getArtifact())
                 .cached(plainXmlModel.isCached() != null ? plainXmlModel.isCached() : true)
                 .name(plainXmlModel.getName())
-                .platformAlias(plainXmlModel.getPlatformAlias())
                 .readOnLoad(plainXmlModel.isReadOnLoad() != null ? plainXmlModel.isReadOnLoad() : true)
                 .storeOnDisposal(plainXmlModel.isStoreOnDisposal() != null ? plainXmlModel.isStoreOnDisposal() : true)
                 .build();

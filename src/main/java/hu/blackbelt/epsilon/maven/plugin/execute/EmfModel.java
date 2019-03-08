@@ -1,16 +1,17 @@
 package hu.blackbelt.epsilon.maven.plugin.execute;
 
 import hu.blackbelt.epsilon.runtime.execution.model.emf.EmfModelContext;
-import hu.blackbelt.epsilon.runtime.execution.model.xml.XmlModelContext;
 import lombok.Data;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.epsilon.common.util.StringProperties;
 
+import java.io.File;
 import java.util.List;
 
+import static hu.blackbelt.epsilon.runtime.execution.model.emf.EmfModelContext.emfModelContextBuilder;
+
 @Data
-public class XmlModel {
+public class EmfModel {
 
     @Parameter(name = "artifact", readonly = true, required = true)
     String artifact;
@@ -32,9 +33,6 @@ public class XmlModel {
 
     @Parameter(name = "referenceUri", readonly = true)
     String referenceUri;
-
-    @Parameter(name = "xsd", readonly = true)
-    String xsd;
 
     /**
      * One of the keys used to construct the first argument to {@link org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
@@ -70,10 +68,9 @@ public class XmlModel {
     }
 
     public EmfModelContext toModelContext() {
-        return XmlModelContext.xmlModelContextBuilder()
+        return emfModelContextBuilder()
                 .aliases(aliases)
-                .xml(artifact)
-                .xsd(xsd)
+                .model(artifact)
                 .cached(cached)
                 .expand(expand)
                 .name(name)

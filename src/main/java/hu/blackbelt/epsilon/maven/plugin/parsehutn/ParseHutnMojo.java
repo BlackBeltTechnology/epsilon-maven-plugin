@@ -2,7 +2,6 @@ package hu.blackbelt.epsilon.maven.plugin.parsehutn;
 
 import hu.blackbelt.epsilon.runtime.execution.ExecutionContext;
 import hu.blackbelt.epsilon.maven.plugin.execute.AbstractEpsilonMojo;
-import hu.blackbelt.epsilon.maven.plugin.MavenArtifactResolver;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -41,19 +40,22 @@ public class ParseHutnMojo extends AbstractEpsilonMojo {
     synchronized public void execute() throws MojoExecutionException, MojoFailureException {
         // EclipsePlatformStreamHandlerFactory.urlMapping.clear();
 
-        try (ExecutionContext executionContext = ExecutionContext.builder()
-                .metaModels(metaModels)
-                .modelContexts(
-                        Stream.concat(
-                                models.stream().map(m -> m.toModelContext()),
-                                plainXmlModels.stream().map(m -> m.toModelContext()))
-                                .collect(Collectors.toList()))
-                .artifactResolver(MavenArtifactResolver.builder()
+        /*
+                        .artifactResolver(MavenArtifactResolver.builder()
                         .repoSession(repoSession)
                         .repositories(repositories)
                         .repoSystem(repoSystem)
                         .log(log)
                         .build())
+
+         */
+        try (ExecutionContext executionContext = ExecutionContext.executionContextBuilder()
+                .metaModels(metaModels)
+                .modelContexts(
+                        Stream.concat(
+                                emfModels.stream().map(m -> m.toModelContext()),
+                                plainXmlModels.stream().map(m -> m.toModelContext()))
+                                .collect(Collectors.toList()))
                 .log(log)
                 .build()) {
 

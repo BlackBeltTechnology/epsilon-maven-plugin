@@ -6,6 +6,8 @@ import hu.blackbelt.epsilon.runtime.execution.model.excel.ExcelModelContext;
 
 import java.util.Collections;
 
+import static hu.blackbelt.epsilon.runtime.execution.model.excel.ExcelModelContext.excelModelContextBuilder;
+
 public class ExcelModel {
 
     final ExcelModelType excelModel;
@@ -15,9 +17,10 @@ public class ExcelModel {
     }
 
     public ExcelModelContext toModelContext() {
-        return ExcelModelContext.builder()
+        return excelModelContextBuilder()
                 .aliases(excelModel.getAliases() != null ? excelModel.getAliases().getAlias() : Collections.emptyList())
-                .artifacts(ImmutableMap.of("excelSheet", excelModel.getArtifact(), "excelConfiguration", excelModel.getConfigurationArtifact()))
+                .excelSheet(excelModel.getArtifact())
+                .excelConfiguration(excelModel.getConfigurationArtifact())
                 .cached(excelModel.isCached() != null ? excelModel.isCached() : true)
                 .name(excelModel.getName())
                 .readOnLoad(excelModel.isReadOnLoad() != null ? excelModel.isReadOnLoad() : true)

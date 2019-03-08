@@ -28,9 +28,6 @@ public class PlainXmlModel {
     @Parameter(name = "cached", defaultValue = "true", readonly = true)
     boolean cached = true;
 
-    @Parameter(name = "platformAlias", readonly = true)
-    String platformAlias;
-
     @Override
     public String toString() {
         return "PlainXmlModel{" +
@@ -40,17 +37,15 @@ public class PlainXmlModel {
                 ", readOnLoad=" + readOnLoad +
                 ", storeOnDisposal=" + storeOnDisposal +
                 ", cached=" + cached +
-                ", platformAlias='" + platformAlias + '\'' +
                 '}';
     }
 
     public PlainXmlModelContext toModelContext() {
-        return PlainXmlModelContext.builder()
+        return PlainXmlModelContext.plainXmlModelContextBuilder()
                 .aliases(aliases)
-                .artifacts(ImmutableMap.of("xml", artifact))
+                .xml(artifact)
                 .cached(cached)
                 .name(name)
-                .platformAlias(platformAlias)
                 .readOnLoad(readOnLoad)
                 .storeOnDisposal(storeOnDisposal)
                 .build();

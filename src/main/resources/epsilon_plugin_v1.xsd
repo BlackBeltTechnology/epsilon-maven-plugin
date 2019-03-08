@@ -88,7 +88,7 @@
             <xs:element name="readOnLoad" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="storeOnDisposal" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="cached" type="xs:boolean" minOccurs="0" default="true"/>
-            <xs:element name="platformAlias" type="xs:string" minOccurs="0"/>
+            <xs:element name="referenceUri" type="xs:string" minOccurs="0"/>
             <xs:element name="metaModelFile" type="xs:string" minOccurs="0"/>
             <xs:element name="expand" type="xs:boolean" minOccurs="0" default="true">
                 <xs:annotation>
@@ -185,7 +185,7 @@
             <xs:element name="readOnLoad" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="storeOnDisposal" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="cached" type="xs:boolean" minOccurs="0" default="true"/>
-            <xs:element name="platformAlias" type="xs:string" minOccurs="0"/>
+            <xs:element name="referenceUri" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -206,7 +206,7 @@
             <xs:element name="readOnLoad" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="storeOnDisposal" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="cached" type="xs:boolean" minOccurs="0" default="true"/>
-            <xs:element name="platformAlias" type="xs:string" minOccurs="0"/>
+            <xs:element name="referenceUri" type="xs:string" minOccurs="0"/>
             <xs:element name="metaModelFile" type="xs:string" minOccurs="0"/>
             <xs:element name="xsd" type="xs:string" minOccurs="0"/>
             <xs:element name="expand" type="xs:boolean" minOccurs="0" default="true">
@@ -297,7 +297,7 @@
             <xs:element name="readOnLoad" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="storeOnDisposal" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="cached" type="xs:boolean" minOccurs="0" default="true"/>
-            <xs:element name="platformAlias" type="xs:string" minOccurs="0"/>
+            <xs:element name="referenceUri" type="xs:string" minOccurs="0"/>
             <xs:element name="metaModelFile" type="xs:string" minOccurs="0"/>
             <xs:element name="configurationArtifact" type="xs:string"/>
             <xs:element name="spreadSheetPassword" type="xs:string" minOccurs="0"/>
