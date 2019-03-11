@@ -86,10 +86,6 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
                 )).build();
 
 
-        // Setup resourcehandler used to load metamodels
-        ResourceSet executionResourceSet = new CachedResourceSet();
-        executionResourceSet.getURIConverter().getURIHandlers().add(0, uriHandler);
-
         final List<URI> configurationUris = new LinkedList<>();
         final List<String> wildcards = new LinkedList<>();
 
@@ -129,6 +125,12 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
 
         final Set<String> completed = new TreeSet<>();
         for (final URI uri : configurationUris) {
+
+            // Setup resourcehandler used to load metamodels
+            ResourceSet executionResourceSet = new CachedResourceSet();
+            executionResourceSet.getURIConverter().getURIHandlers().add(0, uriHandler);
+
+
             log.info("Executing configuration: " + uri);
 
             if (!uriHandler.exists(uri, ImmutableMap.of())) {
