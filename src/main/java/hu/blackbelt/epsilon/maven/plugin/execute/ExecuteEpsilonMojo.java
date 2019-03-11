@@ -37,6 +37,9 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
     @Parameter(name = "addUmlPackages", readonly = true, required = false)
     public Boolean addUmlPackages = false;
 
+    @Parameter(name = "addEcorePackages", readonly = true, required = false)
+    public Boolean addEcorePackages = false;
+
     synchronized public void execute() throws MojoExecutionException, MojoFailureException {
         List modelContexts = Lists.newArrayList();
 
@@ -68,6 +71,7 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
 
         try (ExecutionContext executionContext = executionContextBuilder()
                 .addUmlPackages(addUmlPackages)
+                .addEcorePackages(addEcorePackages)
                 .resourceSet(executionResourceSet)
                 .metaModels(metaModels)
                 .modelContexts(modelContexts)

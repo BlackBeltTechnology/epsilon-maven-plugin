@@ -161,6 +161,7 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
                         .modelContexts(modelContexts)
                         .profile(configuration.isProfile() != null ? configuration.isProfile() : false)
                         .addUmlPackages(configuration.isAddUmlPackages() != null ? configuration.isAddUmlPackages() : false)
+                        .addEcorePackages(configuration.isAddEcorePackages() != null ? configuration.isAddEcorePackages() : false)
                         .sourceDirectory(sourceDirectory)
                         .log(log)
                         .build()) {
