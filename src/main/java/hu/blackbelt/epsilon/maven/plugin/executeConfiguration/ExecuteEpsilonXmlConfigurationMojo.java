@@ -1,11 +1,16 @@
 package hu.blackbelt.epsilon.maven.plugin.executeConfiguration;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import hu.blackbelt.epsilon.maven.plugin.MavenLog;
+import hu.blackbelt.epsilon.maven.plugin.MavenURIHandler;
 import hu.blackbelt.epsilon.maven.plugin.v1.xml.ns.definition.*;
 import hu.blackbelt.epsilon.runtime.execution.ExecutionContext;
 import hu.blackbelt.epsilon.runtime.execution.api.Log;
 import hu.blackbelt.epsilon.runtime.execution.contexts.EolExecutionContext;
+import hu.blackbelt.epsilon.runtime.execution.impl.CompositeURIHandlerImpl;
+import hu.blackbelt.epsilon.runtime.execution.impl.NioFilesystemnRelativePathURIHandlerImpl;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -20,6 +25,10 @@ import org.codehaus.plexus.components.io.resources.PlexusIoResource;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIHandler;
+import org.eclipse.epsilon.emc.emf.CachedResourceSet;
 import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
 import javax.xml.bind.JAXBContext;
@@ -55,37 +64,53 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
 
     public Log log = new MavenLog(getLog());
 
+
+    URIHandler uriHandler;
+
+
     static {
         SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
     }
 
     synchronized public void execute() throws MojoExecutionException, MojoFailureException {
-        final List<File> configurationArtifactFiles = new LinkedList<>();
-        final List<String> includes = new LinkedList<>();
+
+        uriHandler = CompositeURIHandlerImpl.builder().uriHandlerList(
+                ImmutableList.of(
+                        MavenURIHandler.builder()
+                                .repoSession(repoSession)
+                                .repositories(repositories)
+                                .repoSystem(repoSystem)
+                                .build(),
+                        NioFilesystemnRelativePathURIHandlerImpl.builder().urlSchema("file").build(),
+                        NioFilesystemnRelativePathURIHandlerImpl.builder().urlSchema("").build()
+                )).build();
+
+
+        // Setup resourcehandler used to load metamodels
+        ResourceSet executionResourceSet = new CachedResourceSet();
+        executionResourceSet.getURIConverter().getURIHandlers().add(0, uriHandler);
+
+        final List<URI> configurationUris = new LinkedList<>();
+        final List<String> wildcards = new LinkedList<>();
 
         for (final String configurationArtifact : configurationArtifacts) {
-            if (configurationArtifact.startsWith("mvn:")) {
-                configurationArtifactFiles.add(MavenArtifactResolver.builder()
-                        .repoSession(repoSession)
-                        .repositories(repositories)
-                        .repoSystem(repoSystem)
-                        .sourceDirectory(sourceDirectory)
-                        .log(log)
-                        .build()
-                        .getArtifact(configurationArtifact));
+            URI uri = URI.createURI(configurationArtifact);
+            if (uriHandler != null && uriHandler.canHandle(uri) && uriHandler.exists(uri, ImmutableMap.of())) {
+                configurationUris.add(uri);
             } else {
-                includes.add(configurationArtifact);
+                wildcards.add(configurationArtifact);
             }
         }
-        if (!includes.isEmpty()) {
+
+        if (!wildcards.isEmpty()) {
             final PlexusIoFileResourceCollection collection = new PlexusIoFileResourceCollection();
             if (sourceDirectory != null) {
                 collection.setBaseDir(sourceDirectory);
             }
             final FileSelector[] selectors;
             final IncludeExcludeFileSelector fs = new IncludeExcludeFileSelector();
-            final String[] inc = new String[includes.size()];
-            fs.setIncludes(includes.toArray(inc));
+            final String[] inc = new String[wildcards.size()];
+            fs.setIncludes(wildcards.toArray(inc));
             selectors = new FileSelector[]{fs};
             collection.setFileSelectors(selectors);
             final Iterator<PlexusIoResource> resources;
@@ -97,28 +122,28 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
             while (resources.hasNext()) {
                 PlexusIoResource resource = resources.next();
                 if (resource.isFile()) {
-                    configurationArtifactFiles.add(new File(collection.getBaseDir(), resource.getName()));
+                    configurationUris.add(URI.createFileURI(new File(collection.getBaseDir(), resource.getName()).getAbsolutePath()));
                 }
             }
         }
 
         final Set<String> completed = new TreeSet<>();
-        for (final File configurationArtifactFile : configurationArtifactFiles) {
-            log.info("Executing configuration: " + configurationArtifactFile);
+        for (final URI uri : configurationUris) {
+            log.info("Executing configuration: " + uri);
 
-            if (!configurationArtifactFile.exists()) {
-                throw new MojoFailureException("Configuration artifact file not found: " + configurationArtifactFile);
+            if (!uriHandler.exists(uri, ImmutableMap.of())) {
+                throw new MojoFailureException("Configuration file not found: " + uri);
             }
 
             try {
                 final JAXBContext jc = JAXBContext.newInstance(ConfigurationType.class.getPackage().getName(), getClass().getClassLoader());
                 final Unmarshaller unmarshaller = jc.createUnmarshaller();
-                final ConfigurationType configuration = ((JAXBElement<ConfigurationType>) unmarshaller.unmarshal(configurationArtifactFile)).getValue();
+                final ConfigurationType configuration = ((JAXBElement<ConfigurationType>) unmarshaller.unmarshal(uriHandler.createInputStream(uri, ImmutableMap.of()))).getValue();
 
                 List modelContexts = Lists.newArrayList();
 
-                if (configuration.getModels() != null) {
-                    modelContexts.addAll(configuration.getModels().getModel().stream().map(m -> new Model(m).toModelContext()).collect(Collectors.toList()));
+                if (configuration.getEmfModels() != null) {
+                    modelContexts.addAll(configuration.getEmfModels().getEmfModel().stream().map(m -> new EmfModel(m).toModelContext()).collect(Collectors.toList()));
                 }
                 if (configuration.getXmlModels() != null) {
                     modelContexts.addAll(configuration.getXmlModels().getXmlModel().stream().map(m -> new XmlModel(m).toModelContext()).collect(Collectors.toList()));
@@ -130,19 +155,12 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
                     modelContexts.addAll(configuration.getExcelModels().getExcelModel().stream().map(m -> new ExcelModel(m).toModelContext()).collect(Collectors.toList()));
                 }
 
-                /*
-                                        .artifactResolver(MavenArtifactResolver.builder()
-                                .repoSession(repoSession)
-                                .repositories(repositories)
-                                .repoSystem(repoSystem)
-                                .log(log)
-                                .build())
-
-                 */
                 try (ExecutionContext executionContext = executionContextBuilder()
+                        .resourceSet(executionResourceSet)
                         .metaModels(configuration.getMetaModels().getMetaModel())
                         .modelContexts(modelContexts)
                         .profile(configuration.isProfile() != null ? configuration.isProfile() : false)
+                        .addUmlPackages(configuration.isAddUmlPackages() != null ? configuration.isAddUmlPackages() : false)
                         .sourceDirectory(sourceDirectory)
                         .log(log)
                         .build()) {
@@ -168,7 +186,7 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
                         executionContext.executeProgram(eolExecutionContext);
                     });
                     executionContext.commit();
-                    completed.add(configurationArtifactFile.getAbsolutePath());
+                    completed.add(uri.toString());
                 }
             } catch (Exception ex) {
                 log.debug("Completed configuration artifacts: \n" + String.join(",\n", completed));

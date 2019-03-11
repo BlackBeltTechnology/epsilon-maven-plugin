@@ -1,20 +1,21 @@
 package hu.blackbelt.epsilon.maven.plugin.execute;
 
+import com.google.common.collect.Lists;
 import hu.blackbelt.epsilon.runtime.execution.model.emf.EmfModelContext;
 import lombok.Data;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.eclipse.epsilon.common.util.StringProperties;
 
-import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static hu.blackbelt.epsilon.runtime.execution.model.emf.EmfModelContext.emfModelContextBuilder;
 
 @Data
 public class EmfModel {
 
-    @Parameter(name = "artifact", readonly = true, required = true)
-    String artifact;
+    @Parameter(name = "emf", readonly = true, required = true)
+    String emf;
 
     @Parameter(name = "name", required = true, readonly = true)
     String name;
@@ -34,14 +35,6 @@ public class EmfModel {
     @Parameter(name = "referenceUri", readonly = true)
     String referenceUri;
 
-    /**
-     * One of the keys used to construct the first argument to {@link org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
-     *
-     * When paired with "true", external references will be resolved during loading.
-     * Otherwise, external references are not resolved.
-     *
-     * Paired with "true" by default.
-     */
     @Parameter(name = "expand", defaultValue = "true", readonly = true)
     boolean expand;
 
@@ -51,11 +44,14 @@ public class EmfModel {
     @Parameter(name = "validateModel", defaultValue = "true", readonly = true)
     boolean validateModel;
 
+    @Parameter(name = "uriMap")
+    List<URIConverterMapEntry> uriMap = Lists.newArrayList();
+
 
     @Override
     public String toString() {
         return "EmfModel{" +
-                "artifact='" + artifact + '\'' +
+                "emf='" + emf + '\'' +
                 ", name='" + name + '\'' +
                 ", aliases=" + aliases +
                 ", readOnLoad=" + readOnLoad +
@@ -70,7 +66,7 @@ public class EmfModel {
     public EmfModelContext toModelContext() {
         return emfModelContextBuilder()
                 .aliases(aliases)
-                .model(artifact)
+                .emf(emf)
                 .cached(cached)
                 .expand(expand)
                 .name(name)
@@ -78,6 +74,7 @@ public class EmfModel {
                 .readOnLoad(readOnLoad)
                 .storeOnDisposal(storeOnDisposal)
                 .validateModel(validateModel)
+                .uriConverterMap(uriMap.stream().collect(Collectors.toMap(URIConverterMapEntry::getFromURI, URIConverterMapEntry::getToURI)))
                 .build();
     }
 }

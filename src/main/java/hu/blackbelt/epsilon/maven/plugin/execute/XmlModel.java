@@ -1,5 +1,6 @@
 package hu.blackbelt.epsilon.maven.plugin.execute;
 
+import com.google.common.collect.Lists;
 import hu.blackbelt.epsilon.runtime.execution.model.emf.EmfModelContext;
 import hu.blackbelt.epsilon.runtime.execution.model.xml.XmlModelContext;
 import lombok.Data;
@@ -8,12 +9,13 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.epsilon.common.util.StringProperties;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class XmlModel {
 
-    @Parameter(name = "artifact", readonly = true, required = true)
-    String artifact;
+    @Parameter(name = "xml", readonly = true, required = true)
+    String xml;
 
     @Parameter(name = "name", required = true, readonly = true)
     String name;
@@ -53,11 +55,13 @@ public class XmlModel {
     @Parameter(name = "validateModel", defaultValue = "true", readonly = true)
     boolean validateModel;
 
+    @Parameter(name = "uriMap")
+    List<URIConverterMapEntry> uriMap = Lists.newArrayList();
 
     @Override
     public String toString() {
         return "EmfModel{" +
-                "artifact='" + artifact + '\'' +
+                "xml='" + xml + '\'' +
                 ", name='" + name + '\'' +
                 ", aliases=" + aliases +
                 ", readOnLoad=" + readOnLoad +
@@ -72,12 +76,13 @@ public class XmlModel {
     public EmfModelContext toModelContext() {
         return XmlModelContext.xmlModelContextBuilder()
                 .aliases(aliases)
-                .xml(artifact)
+                .xml(xml)
                 .xsd(xsd)
                 .cached(cached)
                 .expand(expand)
                 .name(name)
                 .referenceUri(referenceUri)
+                .uriConverterMap(uriMap.stream().collect(Collectors.toMap(URIConverterMapEntry::getFromURI, URIConverterMapEntry::getToURI)))
                 .readOnLoad(readOnLoad)
                 .storeOnDisposal(storeOnDisposal)
                 .validateModel(validateModel)

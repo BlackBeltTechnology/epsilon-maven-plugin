@@ -56,8 +56,7 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
         URIHandler uriHandler = MavenURIHandler.builder()
                 .repoSystem(repoSystem)
                 .repositories(repositories)
-                .repoSession(repoSession)
-                .sourceDirectory(sourceDirectory).build();
+                .repoSession(repoSession).build();
 
         // Setup resourcehandler used to load metamodels
         ResourceSet  executionResourceSet = new CachedResourceSet();

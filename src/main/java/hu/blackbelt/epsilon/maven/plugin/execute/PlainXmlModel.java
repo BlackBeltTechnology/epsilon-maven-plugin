@@ -10,8 +10,8 @@ import java.util.List;
 @Data
 public class PlainXmlModel {
 
-    @Parameter(name = "artifact", readonly = true, required = true)
-    String artifact;
+    @Parameter(name = "xml", readonly = true, required = true)
+    String xml;
 
     @Parameter(name = "name", required = true, readonly = true)
     String name;
@@ -31,7 +31,7 @@ public class PlainXmlModel {
     @Override
     public String toString() {
         return "PlainXmlModel{" +
-                "artifact='" + artifact + '\'' +
+                "xml='" + xml + '\'' +
                 ", name='" + name + '\'' +
                 ", aliases=" + aliases +
                 ", readOnLoad=" + readOnLoad +
@@ -43,7 +43,7 @@ public class PlainXmlModel {
     public PlainXmlModelContext toModelContext() {
         return PlainXmlModelContext.plainXmlModelContextBuilder()
                 .aliases(aliases)
-                .xml(artifact)
+                .xml(xml)
                 .cached(cached)
                 .name(name)
                 .readOnLoad(readOnLoad)

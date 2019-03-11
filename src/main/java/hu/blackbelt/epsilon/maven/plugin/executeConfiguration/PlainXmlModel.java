@@ -17,7 +17,7 @@ public class PlainXmlModel {
     public PlainXmlModelContext toModelContext() {
         return PlainXmlModelContext.plainXmlModelContextBuilder()
                 .aliases(plainXmlModel.getAliases() != null ? plainXmlModel.getAliases().getAlias() : Collections.emptyList())
-                .xml(plainXmlModel.getArtifact())
+                .xml(plainXmlModel.getXml())
                 .cached(plainXmlModel.isCached() != null ? plainXmlModel.isCached() : true)
                 .name(plainXmlModel.getName())
                 .readOnLoad(plainXmlModel.isReadOnLoad() != null ? plainXmlModel.isReadOnLoad() : true)
