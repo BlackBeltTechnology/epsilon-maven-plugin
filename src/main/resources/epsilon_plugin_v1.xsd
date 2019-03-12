@@ -320,14 +320,14 @@
                     <xs:element name="expectedErrors" minOccurs="0">
                         <xs:complexType>
                             <xs:sequence>
-                                <xs:element name="expectedError" type="xs:string" maxOccurs="unbounded"/>
+                                <xs:element name="expectedError" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
                             </xs:sequence>
                         </xs:complexType>
                     </xs:element>
                     <xs:element name="expectedWarnings" minOccurs="0">
                         <xs:complexType>
                             <xs:sequence>
-                                <xs:element name="expectedWarning" type="xs:string" maxOccurs="unbounded"/>
+                                <xs:element name="expectedWarning" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
                             </xs:sequence>
                         </xs:complexType>
                     </xs:element>
