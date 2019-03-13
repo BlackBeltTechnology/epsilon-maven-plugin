@@ -3,6 +3,7 @@ package hu.blackbelt.epsilon.maven.plugin.executeConfiguration;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import hu.blackbelt.epsilon.maven.plugin.MavenLog;
 import hu.blackbelt.epsilon.maven.plugin.MavenURIHandler;
 import hu.blackbelt.epsilon.maven.plugin.v1.xml.ns.definition.*;
@@ -40,6 +41,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static hu.blackbelt.epsilon.runtime.execution.ExecutionContext.executionContextBuilder;
+import static java.lang.Class.forName;
 
 @Mojo(name = "executeConfiguration", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
@@ -67,10 +69,10 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
 
     URIHandler uriHandler;
 
-
+    /*
     static {
         SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
-    }
+    } */
 
     synchronized public void execute() throws MojoExecutionException, MojoFailureException {
 
@@ -131,6 +133,7 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
             executionResourceSet.getURIConverter().getURIHandlers().add(0, uriHandler);
 
 
+            log.info("================================================================================");
             log.info("Executing configuration: " + uri);
 
             if (!uriHandler.exists(uri, ImmutableMap.of())) {
@@ -157,6 +160,17 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
                     modelContexts.addAll(configuration.getExcelModels().getExcelModel().stream().map(m -> new ExcelModel(m).toModelContext()).collect(Collectors.toList()));
                 }
 
+                Map<String, Object> injectedContextMap = Maps.newHashMap();
+                if (configuration.getInjectedContexts() != null && configuration.getInjectedContexts().getInject() != null) {
+                    for (InjectedContextType i : configuration.getInjectedContexts().getInject()) {
+                        try {
+                            injectedContextMap.put(i.getName(), forName(i.getClazz()).newInstance());
+                        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                            throw new MojoFailureException("Coluld not inject context", e);
+                        }
+                    }
+                }
+
                 try (ExecutionContext executionContext = executionContextBuilder()
                         .resourceSet(executionResourceSet)
                         .metaModels(configuration.getMetaModels().getMetaModel())
@@ -165,11 +179,13 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
                         .addUmlPackages(configuration.isAddUmlPackages() != null ? configuration.isAddUmlPackages() : false)
                         .addEcorePackages(configuration.isAddEcorePackages() != null ? configuration.isAddEcorePackages() : false)
                         .sourceDirectory(sourceDirectory)
+                        .injectContexts(injectedContextMap)
                         .log(log)
                         .build()) {
 
                     executionContext.load();
-                    configuration.getEolPrograms().getEclOrEglOrEgx().forEach(prg -> {
+
+                    for (EolType prg : configuration.getEolPrograms().getEclOrEglOrEgx()) {
                         final EolExecutionContext eolExecutionContext;
                         if (prg instanceof EclType) {
                             eolExecutionContext = Ecl.builder().ecl((EclType) prg).build().toExecutionContext();
@@ -187,7 +203,7 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
                             eolExecutionContext = Eol.builder().eol(prg).build().toExecutionContext();
                         }
                         executionContext.executeProgram(eolExecutionContext);
-                    });
+                    }
                     executionContext.commit();
                     completed.add(uri.toString());
                 }

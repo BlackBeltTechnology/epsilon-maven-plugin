@@ -70,6 +70,13 @@
             <xs:element name="profile" type="xs:boolean" minOccurs="0" default="false"/>
             <xs:element name="addUmlPackages" type="xs:boolean" minOccurs="0" default="false"/>
             <xs:element name="addEcorePackages" type="xs:boolean" minOccurs="0" default="false"/>
+            <xs:element name="injectedContexts" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="inject" type="InjectedContextType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 
@@ -351,8 +358,18 @@
             <xs:documentation>URI Converter Map Entry.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="fromURI" type="xs:string"/>
-            <xs:element name="toURI" type="xs:string"/>
+            <xs:element name="logicalURI" type="xs:string"/>
+            <xs:element name="physicalURI" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="InjectedContextType">
+        <xs:annotation>
+            <xs:documentation>Injected context classes.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="class" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
 

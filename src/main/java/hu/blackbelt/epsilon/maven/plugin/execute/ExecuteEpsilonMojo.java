@@ -1,11 +1,11 @@
 package hu.blackbelt.epsilon.maven.plugin.execute;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import hu.blackbelt.epsilon.maven.plugin.MavenLog;
 import hu.blackbelt.epsilon.maven.plugin.MavenURIHandler;
 import hu.blackbelt.epsilon.runtime.execution.ExecutionContext;
 import hu.blackbelt.epsilon.runtime.execution.api.Log;
-import hu.blackbelt.epsilon.runtime.execution.impl.NioFilesystemnRelativePathURIHandlerImpl;
-import hu.blackbelt.epsilon.runtime.execution.impl.Slf4jLog;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -16,11 +16,12 @@ import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.epsilon.emc.emf.CachedResourceSet;
 
 import java.io.File;
-import java.nio.file.FileSystems;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static hu.blackbelt.epsilon.runtime.execution.ExecutionContext.executionContextBuilder;
+import static java.lang.Class.forName;
 
 @Mojo(name = "execute", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
@@ -39,6 +40,9 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
 
     @Parameter(name = "addEcorePackages", readonly = true, required = false)
     public Boolean addEcorePackages = false;
+
+    @Parameter(name = "injectedContexts", readonly = true, required = true)
+    public List<InjectedContext> injectedContexts;
 
     synchronized public void execute() throws MojoExecutionException, MojoFailureException {
         List modelContexts = Lists.newArrayList();
@@ -66,8 +70,16 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
         executionResourceSet.getURIConverter().getURIHandlers().add(0, uriHandler);
 
         // Default logger
-        Log log = new Slf4jLog();
+        Log log = new MavenLog(getLog());
 
+        Map<String, Object> injectedContextMap = Maps.newHashMap();
+        for (InjectedContext i : injectedContexts) {
+            try {
+                injectedContextMap.put(i.getName(), forName(i.getClazz()).newInstance());
+            } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                log.warn(e);
+            }
+        }
 
         try (ExecutionContext executionContext = executionContextBuilder()
                 .addUmlPackages(addUmlPackages)
@@ -78,10 +90,13 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
                 .profile(profile)
                 .sourceDirectory(sourceDirectory)
                 .log(log)
+                .injectContexts(injectedContextMap)
                 .build()) {
 
             executionContext.load();
-            eolPrograms.stream().forEach(p -> { executionContext.executeProgram(p.toExecutionContext()); });
+            for (Eol p : eolPrograms) {
+                executionContext.executeProgram(p.toExecutionContext());
+            }
             executionContext.commit();
         } catch (Exception e) {
             throw new MojoExecutionException("Execution error: " + e.toString(), e);

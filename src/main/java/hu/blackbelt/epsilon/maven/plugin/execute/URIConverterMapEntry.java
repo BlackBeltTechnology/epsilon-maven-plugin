@@ -6,9 +6,9 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Data
 public class URIConverterMapEntry {
 
-    @Parameter(name = "fromURI")
-    String fromURI;
+    @Parameter(name = "logicalURI")
+    String logicalURI;
 
-    @Parameter(name = "toURI")
-    String toURI;
+    @Parameter(name = "physicalURI")
+    String physicalURI;
 }

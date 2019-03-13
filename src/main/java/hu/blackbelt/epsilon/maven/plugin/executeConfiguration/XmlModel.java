@@ -32,7 +32,7 @@ public class XmlModel {
                 .referenceUri(xmlModel.getReferenceUri())
                 .uriConverterMap( xmlModel.getUriMap() != null ?
                         xmlModel.getUriMap().getEntry().stream()
-                                .collect(Collectors.toMap(URIConverterMapType::getFromURI, URIConverterMapType::getToURI))
+                                .collect(Collectors.toMap(URIConverterMapType::getLogicalURI, URIConverterMapType::getPhysicalURI))
                         : ImmutableMap.of())
                 .readOnLoad(xmlModel.isReadOnLoad() != null ? xmlModel.isReadOnLoad() : true)
                 .storeOnDisposal(xmlModel.isStoreOnDisposal() != null ? xmlModel.isStoreOnDisposal() : true)

@@ -28,7 +28,7 @@ public class EmfModel {
                 .referenceUri(emfModel.getReferenceUri())
                 .uriConverterMap( emfModel.getUriMap() != null ?
                         emfModel.getUriMap().getEntry().stream()
-                                .collect(Collectors.toMap(URIConverterMapType::getFromURI, URIConverterMapType::getToURI))
+                                .collect(Collectors.toMap(URIConverterMapType::getLogicalURI, URIConverterMapType::getPhysicalURI))
                         : ImmutableMap.of())
                 .readOnLoad(emfModel.isReadOnLoad() != null ? emfModel.isReadOnLoad() : true)
                 .storeOnDisposal(emfModel.isStoreOnDisposal() != null ? emfModel.isStoreOnDisposal() : true)

@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import hu.blackbelt.epsilon.runtime.execution.model.emf.EmfModelContext;
 import lombok.Data;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eclipse.epsilon.common.util.StringProperties;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,7 +73,7 @@ public class EmfModel {
                 .readOnLoad(readOnLoad)
                 .storeOnDisposal(storeOnDisposal)
                 .validateModel(validateModel)
-                .uriConverterMap(uriMap.stream().collect(Collectors.toMap(URIConverterMapEntry::getFromURI, URIConverterMapEntry::getToURI)))
+                .uriConverterMap(uriMap.stream().collect(Collectors.toMap(URIConverterMapEntry::getLogicalURI, URIConverterMapEntry::getPhysicalURI)))
                 .build();
     }
 }

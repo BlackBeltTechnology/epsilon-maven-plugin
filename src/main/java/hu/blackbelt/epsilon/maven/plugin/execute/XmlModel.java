@@ -5,7 +5,6 @@ import hu.blackbelt.epsilon.runtime.execution.model.emf.EmfModelContext;
 import hu.blackbelt.epsilon.runtime.execution.model.xml.XmlModelContext;
 import lombok.Data;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.epsilon.common.util.StringProperties;
 
 import java.util.List;
@@ -82,7 +81,7 @@ public class XmlModel {
                 .expand(expand)
                 .name(name)
                 .referenceUri(referenceUri)
-                .uriConverterMap(uriMap.stream().collect(Collectors.toMap(URIConverterMapEntry::getFromURI, URIConverterMapEntry::getToURI)))
+                .uriConverterMap(uriMap.stream().collect(Collectors.toMap(URIConverterMapEntry::getLogicalURI, URIConverterMapEntry::getPhysicalURI)))
                 .readOnLoad(readOnLoad)
                 .storeOnDisposal(storeOnDisposal)
                 .validateModel(validateModel)
