@@ -41,7 +41,7 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
     @Parameter(name = "addEcorePackages", readonly = true, required = false)
     public Boolean addEcorePackages = false;
 
-    @Parameter(name = "injectedContexts", readonly = true, required = true)
+    @Parameter(name = "injectedContexts", readonly = true, required = false)
     public List<InjectedContext> injectedContexts;
 
     synchronized public void execute() throws MojoExecutionException, MojoFailureException {
@@ -73,11 +73,13 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
         Log log = new MavenLog(getLog());
 
         Map<String, Object> injectedContextMap = Maps.newHashMap();
-        for (InjectedContext i : injectedContexts) {
-            try {
-                injectedContextMap.put(i.getName(), forName(i.getClazz()).newInstance());
-            } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-                log.warn(e);
+        if (injectedContexts != null) {
+            for (InjectedContext i : injectedContexts) {
+                try {
+                    injectedContextMap.put(i.getName(), forName(i.getClazz()).newInstance());
+                } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                    log.warn(e);
+                }
             }
         }
 

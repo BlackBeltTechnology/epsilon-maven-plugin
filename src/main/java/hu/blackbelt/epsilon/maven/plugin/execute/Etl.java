@@ -7,6 +7,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import java.util.stream.Collectors;
 
+import static hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter.programParameterBuilder;
+
 public class Etl extends Eol {
 
     @Parameter(name = "exportTransformationTrace", readonly = false, required = true)
@@ -17,7 +19,7 @@ public class Etl extends Eol {
     EolExecutionContext toExecutionContext() {
         return EtlExecutionContext.etlExecutionContextBuilder()
                 .parameters(parameters.stream()
-                        .map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
+                        .map(p -> programParameterBuilder().name(p.name).value(p.value).build())
                         .collect(Collectors.toList()))
                 .exportTransformationTrace(exportTransformationTrace)
                 .source(source)

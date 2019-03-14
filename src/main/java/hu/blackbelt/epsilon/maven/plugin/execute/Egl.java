@@ -7,6 +7,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import java.util.stream.Collectors;
 
+import static hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter.programParameterBuilder;
+
 public class Egl extends Eol {
 
 	@Parameter(property = "outputRoot", defaultValue = "${project.basedir}/target/generated-sources")
@@ -16,7 +18,7 @@ public class Egl extends Eol {
 	EolExecutionContext toExecutionContext() {
 		return EglExecutionContext.eglExecutionContextBuilder()
 				.parameters(parameters.stream()
-						.map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
+						.map(p -> programParameterBuilder().name(p.name).value(p.value).build())
 						.collect(Collectors.toList()))
 				.source(source)
 				.outputRoot(outputRoot)
