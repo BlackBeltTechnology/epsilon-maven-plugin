@@ -8,6 +8,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter.programParameterBuilder;
+
 public class Evl extends Eol {
 
     @Parameter(name = "expectedErrors")
@@ -19,7 +21,7 @@ public class Evl extends Eol {
     EolExecutionContext toExecutionContext() {
         return EvlExecutionContext.evlExecutionContextBuilder()
                 .parameters(parameters.stream()
-                        .map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
+                        .map(p -> programParameterBuilder().name(p.name).value(p.value).build())
                         .collect(Collectors.toList()))
                 .source(source)
                 .expectedErrors(expectedErrors)

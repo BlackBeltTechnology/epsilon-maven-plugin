@@ -1,7 +1,7 @@
 package hu.blackbelt.epsilon.maven.plugin;
 
 
-import hu.blackbelt.epsilon.runtime.execution.Log;
+import hu.blackbelt.epsilon.runtime.execution.api.Log;
 
 public class MavenLog implements Log {
 

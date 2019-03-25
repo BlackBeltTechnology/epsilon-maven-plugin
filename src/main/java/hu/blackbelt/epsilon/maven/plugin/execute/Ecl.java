@@ -7,6 +7,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 import java.util.stream.Collectors;
 
+import static hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter.programParameterBuilder;
+
 public class Ecl extends Eol {
 	
 	@Parameter(property = "exportMatchTrace", defaultValue = "matchTrace")
@@ -19,7 +21,7 @@ public class Ecl extends Eol {
     EolExecutionContext toExecutionContext() {
 		return EclExecutionContext.eclExecutionContextBuilder()
 				.parameters(parameters.stream()
-						.map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
+						.map(p -> programParameterBuilder().name(p.name).value(p.value).build())
 						.collect(Collectors.toList()))
 				.source(source)
 				.exportMatchTrace(exportMatchTrace)

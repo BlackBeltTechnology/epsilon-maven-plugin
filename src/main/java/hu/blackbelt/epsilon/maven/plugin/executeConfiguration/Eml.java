@@ -8,6 +8,8 @@ import lombok.Builder;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+import static hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter.programParameterBuilder;
+
 @Builder
 public class Eml {
 
@@ -16,7 +18,7 @@ public class Eml {
     EmlExecutionContext toExecutionContext() {
         return EmlExecutionContext.emlExecutionContextBuilder()
                 .parameters(eml.getParameters() != null ? eml.getParameters().getParameter().stream()
-                        .map(p -> ProgramParameter.builder().name(p.getName()).value(p.getValue()).build())
+                        .map(p -> programParameterBuilder().name(p.getName()).value(p.getValue()).build())
                         .collect(Collectors.toList()) : Collections.emptyList())
                 .source(eml.getSource())
                 .useMatchTrace(eml.getUseMatchTrace())

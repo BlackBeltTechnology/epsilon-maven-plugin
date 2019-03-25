@@ -1,7 +1,7 @@
 package hu.blackbelt.epsilon.maven.plugin.execute;
 
 import hu.blackbelt.epsilon.maven.plugin.MavenLog;
-import hu.blackbelt.epsilon.runtime.execution.Log;
+import hu.blackbelt.epsilon.runtime.execution.api.Log;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -31,7 +31,7 @@ public abstract class AbstractEpsilonMojo extends AbstractMojo {
     public List<String> metaModels;
 
     @Parameter(readonly = true)
-    public List<Model> models;
+    public List<EmfModel> emfModels;
 
     @Parameter(readonly = true)
     public List<PlainXmlModel> plainXmlModels;

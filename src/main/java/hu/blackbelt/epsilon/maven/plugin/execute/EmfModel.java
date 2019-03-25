@@ -2,19 +2,19 @@ package hu.blackbelt.epsilon.maven.plugin.execute;
 
 import com.google.common.collect.Lists;
 import hu.blackbelt.epsilon.runtime.execution.model.emf.EmfModelContext;
-import hu.blackbelt.epsilon.runtime.execution.model.xml.XmlModelContext;
 import lombok.Data;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eclipse.epsilon.common.util.StringProperties;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
-public class XmlModel {
+import static hu.blackbelt.epsilon.runtime.execution.model.emf.EmfModelContext.emfModelContextBuilder;
 
-    @Parameter(name = "xml", readonly = true, required = true)
-    String xml;
+@Data
+public class EmfModel {
+
+    @Parameter(name = "emf", readonly = true, required = true)
+    String emf;
 
     @Parameter(name = "name", required = true, readonly = true)
     String name;
@@ -34,17 +34,6 @@ public class XmlModel {
     @Parameter(name = "referenceUri", readonly = true)
     String referenceUri;
 
-    @Parameter(name = "xsd", readonly = true)
-    String xsd;
-
-    /**
-     * One of the keys used to construct the first argument to {@link org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
-     *
-     * When paired with "true", external references will be resolved during loading.
-     * Otherwise, external references are not resolved.
-     *
-     * Paired with "true" by default.
-     */
     @Parameter(name = "expand", defaultValue = "true", readonly = true)
     boolean expand;
 
@@ -57,10 +46,11 @@ public class XmlModel {
     @Parameter(name = "uriMap")
     List<URIConverterMapEntry> uriMap = Lists.newArrayList();
 
+
     @Override
     public String toString() {
         return "EmfModel{" +
-                "xml='" + xml + '\'' +
+                "emf='" + emf + '\'' +
                 ", name='" + name + '\'' +
                 ", aliases=" + aliases +
                 ", readOnLoad=" + readOnLoad +
@@ -73,18 +63,17 @@ public class XmlModel {
     }
 
     public EmfModelContext toModelContext() {
-        return XmlModelContext.xmlModelContextBuilder()
+        return emfModelContextBuilder()
                 .aliases(aliases)
-                .xml(xml)
-                .xsd(xsd)
+                .emf(emf)
                 .cached(cached)
                 .expand(expand)
                 .name(name)
                 .referenceUri(referenceUri)
-                .uriConverterMap(uriMap.stream().collect(Collectors.toMap(URIConverterMapEntry::getLogicalURI, URIConverterMapEntry::getPhysicalURI)))
                 .readOnLoad(readOnLoad)
                 .storeOnDisposal(storeOnDisposal)
                 .validateModel(validateModel)
+                .uriConverterMap(uriMap.stream().collect(Collectors.toMap(URIConverterMapEntry::getLogicalURI, URIConverterMapEntry::getPhysicalURI)))
                 .build();
     }
 }
