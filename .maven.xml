@@ -20,21 +20,21 @@
         
         <server>
             <id>blackbelt-nexus-distribution</id>
-            <username>${env.BLACKBELT_NEXUS_USERNAME}</username>
-            <password>${env.BLACKBELT_NEXUS_PASSWORD}</password>
+            <username>${env.JUDONG_NEXUS_USERNAME}</username>
+            <password>${env.JUDONG_NEXUS_PASSWORD}</password>
         </server>
         
         <server>
             <id>blackbelt-nexus-repository</id>
-            <username>${env.BLACKBELT_NEXUS_USERNAME}</username>
-            <password>${env.BLACKBELT_NEXUS_PASSWORD}</password>
+            <username>${env.JUDONG_NEXUS_USERNAME}</username>
+            <password>${env.JUDONG_NEXUS_PASSWORD}</password>
         </server>
         
     </servers>
     
     <profiles>
         <profile>
-            <id>ossrh</id>
+            <id>gpg</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
@@ -43,6 +43,24 @@
                 <gpg.executable>${env.GPG_EXECUTABLE}</gpg.executable>
                 <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
             </properties>
+        </profile>
+
+        <profile>
+            <id>ossrh</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>ossrh-snapshots</id>
+                    <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+                    <snapshots>
+                        <enabled>false</enabled>
+                        <updatePolicy>never</updatePolicy>
+                        <checksumPolicy>fail</checksumPolicy>
+                    </snapshots>
+                </repository>
+            </repositories>
         </profile>
         
         <profile>
@@ -65,15 +83,11 @@
                         <updatePolicy>never</updatePolicy>
                         <checksumPolicy>fail</checksumPolicy>
                     </snapshots>
-                    <url>https://nexus.blackbelt.cloud/repository/maven</url>
+                    <url>https://nexus.judo.technology/repository/maven</url>
                     <layout>default</layout>
                 </repository>
             </repositories>
         </profile>
         
     </profiles>
-    
-    <pluginGroups>
-        <pluginGroup>com.amashchenko.maven.plugin</pluginGroup>
-    </pluginGroups>
 </settings>
