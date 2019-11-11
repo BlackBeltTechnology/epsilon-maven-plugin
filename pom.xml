@@ -44,7 +44,7 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <epsilon-runtime-version>1.2.0.develop_101</epsilon-runtime-version>
+        <epsilon-runtime-version>1.2.0_develop-83</epsilon-runtime-version>
     </properties>
     <build>
         <plugins>
