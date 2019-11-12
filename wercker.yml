@@ -25,7 +25,7 @@ build:
     - wercker/maven:
       goals: clean deploy
       settings: .maven.xml
-      profiles: release-github,release-judong,blackbelt-repository
+      profiles: release-github,release-judong
       cache_repo: true
 
 #  after-steps:

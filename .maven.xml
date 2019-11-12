@@ -71,32 +71,5 @@
                 </repository>
             </repositories>
         </profile>
-        
-        <profile>
-            <id>blackbelt-repository</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            
-            <repositories>
-                <repository>
-                    <id>blackbelt-nexus-repository</id>
-                    <name>Blackbelt repository</name>
-                    <releases>
-                        <enabled>true</enabled>
-                        <updatePolicy>never</updatePolicy>
-                        <checksumPolicy>warn</checksumPolicy>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                        <updatePolicy>never</updatePolicy>
-                        <checksumPolicy>fail</checksumPolicy>
-                    </snapshots>
-                    <url>https://nexus.judo.technology/repository/maven</url>
-                    <layout>default</layout>
-                </repository>
-            </repositories>
-        </profile>
-        
     </profiles>
 </settings>
