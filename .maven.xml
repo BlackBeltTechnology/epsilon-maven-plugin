@@ -1,5 +1,4 @@
-<settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-    xsi:schemalocation="http://maven.apache.org/SETTINGS/1.0.0
+<settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/SETTINGS/1.0.0" xsi:schemalocation="http://maven.apache.org/SETTINGS/1.0.0
     http://maven.apache.org/xsd/settings-1.0.0.xsd">
     <servers>
         <server>
@@ -19,19 +18,19 @@
         </server>
         
         <server>
-            <id>blackbelt-nexus-distribution</id>
+            <id>judong-nexus-distribution</id>
             <username>${env.JUDONG_NEXUS_USERNAME}</username>
             <password>${env.JUDONG_NEXUS_PASSWORD}</password>
         </server>
         
         <server>
-            <id>blackbelt-nexus-repository</id>
+            <id>judong-nexus-mirror</id>
             <username>${env.JUDONG_NEXUS_USERNAME}</username>
             <password>${env.JUDONG_NEXUS_PASSWORD}</password>
         </server>
         
     </servers>
-
+    
     <mirrors>
         <mirror>
             <id>judong-nexus-mirror</id>

@@ -53,4 +53,6 @@ local.properties
 .recommenders/
 **/.DS_Store
 wercker.env
-.wercker
+/**/.wercker
+**/GSModel.log*
+
