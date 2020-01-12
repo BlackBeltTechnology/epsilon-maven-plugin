@@ -30,7 +30,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIHandler;
 import org.eclipse.epsilon.emc.emf.CachedResourceSet;
-import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -178,7 +177,6 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
                         .profile(configuration.isProfile() != null ? configuration.isProfile() : false)
                         .addUmlPackages(configuration.isAddUmlPackages() != null ? configuration.isAddUmlPackages() : false)
                         .addEcorePackages(configuration.isAddEcorePackages() != null ? configuration.isAddEcorePackages() : false)
-                        .sourceDirectory(sourceDirectory)
                         .injectContexts(injectedContextMap)
                         .log(log)
                         .build()) {

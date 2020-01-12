@@ -5,6 +5,7 @@ import hu.blackbelt.epsilon.runtime.execution.contexts.EvlExecutionContext;
 import hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter;
 import lombok.Builder;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class Evl {
                 .parameters(evl.getParameters() != null ? evl.getParameters().getParameter().stream()
                         .map(p -> programParameterBuilder().name(p.getName()).value(p.getValue()).build())
                         .collect(Collectors.toList()) : Collections.emptyList())
-                .source(evl.getSource())
+                .source(URI.create(evl.getSource()))
                 .expectedErrors(evl.getExpectedErrors() != null ? evl.getExpectedErrors().getExpectedError() : null)
                 .expectedWarnings(evl.getExpectedWarnings() != null ? evl.getExpectedWarnings().getExpectedWarning() : null)
                 .build();

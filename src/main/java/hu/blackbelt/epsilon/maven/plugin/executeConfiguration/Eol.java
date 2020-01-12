@@ -5,6 +5,7 @@ import hu.blackbelt.epsilon.runtime.execution.contexts.EolExecutionContext;
 import hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter;
 import lombok.Builder;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,7 @@ public class Eol {
                 .parameters(eol.getParameters() != null ? eol.getParameters().getParameter().stream()
                         .map(p -> programParameterBuilder().name(p.getName()).value(p.getValue()).build())
                         .collect(Collectors.toList()) : Collections.emptyList())
-                .source(eol.getSource()).build();
+                .source(URI.create(eol.getSource()))
+                .build();
     }
 }

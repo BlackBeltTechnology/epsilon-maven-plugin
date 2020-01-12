@@ -90,7 +90,6 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
                 .metaModels(metaModels)
                 .modelContexts(modelContexts)
                 .profile(profile)
-                .sourceDirectory(sourceDirectory)
                 .log(log)
                 .injectContexts(injectedContextMap)
                 .build()) {

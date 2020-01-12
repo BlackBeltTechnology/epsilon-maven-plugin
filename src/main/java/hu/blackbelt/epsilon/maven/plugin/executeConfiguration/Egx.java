@@ -6,6 +6,7 @@ import hu.blackbelt.epsilon.runtime.execution.contexts.EgxExecutionContext;
 import hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter;
 import lombok.Builder;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ public class Egx {
                 .parameters(egx.getParameters() != null ? egx.getParameters().getParameter().stream()
                         .map(p -> programParameterBuilder().name(p.getName()).value(p.getValue()).build())
                         .collect(Collectors.toList()) : Collections.emptyList())
-                .outputRoot(egx.getOutputRoot())
-                .source(egx.getSource()).build();
+                .source(URI.create(egx.getSource()))
+                .build();
     }
 }

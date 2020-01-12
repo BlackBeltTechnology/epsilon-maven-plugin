@@ -5,6 +5,7 @@ import hu.blackbelt.epsilon.runtime.execution.contexts.EclExecutionContext;
 import hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter;
 import lombok.Builder;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class Ecl {
                 .parameters(ecl.getParameters() != null ? ecl.getParameters().getParameter().stream()
                         .map(p -> programParameterBuilder().name(p.getName()).value(p.getValue()).build())
                         .collect(Collectors.toList()) : Collections.emptyList())
-                .source(ecl.getSource())
+                .source(URI.create(ecl.getSource()))
                 .exportMatchTrace(ecl.getExportMatchTrace())
                 .useMatchTrace(ecl.getUseMatchTrace())
                 .build();
