@@ -7,11 +7,6 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.eclipse.epsilon.common.parse.problem.ParseProblem;
-import org.eclipse.epsilon.emc.emf.EmfModel;
-import org.eclipse.epsilon.eol.models.ModelRepository;
-import org.eclipse.epsilon.hutn.HutnContext;
-import org.eclipse.epsilon.hutn.HutnModule;
 
 import java.io.File;
 import java.util.List;
@@ -33,9 +28,9 @@ public class ParseHutnMojo extends AbstractEpsilonMojo {
     }
 
     // This logic has been extracted so that it can be stubbed out in tests
-    protected EmfModel createEmfModel() {
-        return new EmfModel();
-    }
+//    protected EmfModel createEmfModel() {
+//        return new EmfModel();
+//    }
 
     synchronized public void execute() throws MojoExecutionException, MojoFailureException {
         // EclipsePlatformStreamHandlerFactory.urlMapping.clear();
@@ -59,9 +54,9 @@ public class ParseHutnMojo extends AbstractEpsilonMojo {
                 .log(log)
                 .build()) {
 
-            HutnModule module = new HutnModule();
-            setHutnContext(module, executionContext.getProjectModelRepository());
-            parseHutnAndStoreModel(module);
+//            HutnModule module = new HutnModule();
+//            setHutnContext(module, executionContext.getProjectModelRepository());
+//            parseHutnAndStoreModel(module);
 
             executionContext.commit();
         } catch (Exception e) {
@@ -69,6 +64,7 @@ public class ParseHutnMojo extends AbstractEpsilonMojo {
         }
     }
 
+    /*
     private void parseHutnAndStoreModel(HutnModule module)
             throws Exception {
         getLog().info("Start parsing HUTN file");
@@ -97,5 +93,5 @@ public class ParseHutnMojo extends AbstractEpsilonMojo {
         context.setModelRepository(modelRepository);
         module.setContext(context);
     }
-
+    */
 }
