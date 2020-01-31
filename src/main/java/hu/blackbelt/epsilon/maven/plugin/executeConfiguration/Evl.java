@@ -5,8 +5,11 @@ import hu.blackbelt.epsilon.runtime.execution.contexts.EvlExecutionContext;
 import hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter;
 import lombok.Builder;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.stream.Collectors;
+
+import static hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter.programParameterBuilder;
 
 @Builder
 public class Evl {
@@ -16,9 +19,9 @@ public class Evl {
     EvlExecutionContext toExecutionContext() {
         return EvlExecutionContext.evlExecutionContextBuilder()
                 .parameters(evl.getParameters() != null ? evl.getParameters().getParameter().stream()
-                        .map(p -> ProgramParameter.builder().name(p.getName()).value(p.getValue()).build())
+                        .map(p -> programParameterBuilder().name(p.getName()).value(p.getValue()).build())
                         .collect(Collectors.toList()) : Collections.emptyList())
-                .source(evl.getSource())
+                .source(URI.create(evl.getSource()))
                 .expectedErrors(evl.getExpectedErrors() != null ? evl.getExpectedErrors().getExpectedError() : null)
                 .expectedWarnings(evl.getExpectedWarnings() != null ? evl.getExpectedWarnings().getExpectedWarning() : null)
                 .build();

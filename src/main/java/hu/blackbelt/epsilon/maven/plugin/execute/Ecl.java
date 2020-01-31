@@ -5,7 +5,10 @@ import hu.blackbelt.epsilon.runtime.execution.contexts.EolExecutionContext;
 import hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter;
 import org.apache.maven.plugins.annotations.Parameter;
 
+import java.net.URI;
 import java.util.stream.Collectors;
+
+import static hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter.programParameterBuilder;
 
 public class Ecl extends Eol {
 	
@@ -19,9 +22,9 @@ public class Ecl extends Eol {
     EolExecutionContext toExecutionContext() {
 		return EclExecutionContext.eclExecutionContextBuilder()
 				.parameters(parameters.stream()
-						.map(p -> ProgramParameter.builder().name(p.name).value(p.value).build())
+						.map(p -> programParameterBuilder().name(p.name).value(p.value).build())
 						.collect(Collectors.toList()))
-				.source(source)
+				.source(URI.create(source))
 				.exportMatchTrace(exportMatchTrace)
 				.useMatchTrace(useMatchTrace)
 				.build();

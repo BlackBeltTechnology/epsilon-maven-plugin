@@ -26,13 +26,13 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="models" minOccurs="0">
+            <xs:element name="emfModels" minOccurs="0">
                 <xs:annotation>
-                    <xs:documentation>List of models.</xs:documentation>
+                    <xs:documentation>List of EMF models.</xs:documentation>
                 </xs:annotation>
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="model" type="ModelType" maxOccurs="unbounded"/>
+                        <xs:element name="emfModel" type="EmfModelType" maxOccurs="unbounded"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -68,15 +68,24 @@
             </xs:element>
             <xs:element name="eolPrograms" type="EolProgramsType"/>
             <xs:element name="profile" type="xs:boolean" minOccurs="0" default="false"/>
+            <xs:element name="addUmlPackages" type="xs:boolean" minOccurs="0" default="false"/>
+            <xs:element name="addEcorePackages" type="xs:boolean" minOccurs="0" default="false"/>
+            <xs:element name="injectedContexts" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="inject" type="InjectedContextType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="ModelType">
+    <xs:complexType name="EmfModelType">
         <xs:annotation>
             <xs:documentation>Model data type.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="artifact" type="xs:string"/>
+            <xs:element name="emf" type="xs:string"/>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="aliases" minOccurs="0">
                 <xs:complexType>
@@ -88,8 +97,7 @@
             <xs:element name="readOnLoad" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="storeOnDisposal" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="cached" type="xs:boolean" minOccurs="0" default="true"/>
-            <xs:element name="platformAlias" type="xs:string" minOccurs="0"/>
-            <xs:element name="metaModelFile" type="xs:string" minOccurs="0"/>
+            <xs:element name="referenceUri" type="xs:string" minOccurs="0"/>
             <xs:element name="expand" type="xs:boolean" minOccurs="0" default="true">
                 <xs:annotation>
                     <xs:documentation>
@@ -101,69 +109,19 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="metaModelUris" minOccurs="0">
-                <xs:complexType>
-                    <xs:annotation>
-                        <xs:documentation>
-                            One of the keys used to construct the first argument to {@link
-                            org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
-
-                            This key is a comma-separated list of zero or more namespaces URI of some of the metamodels
-                            to which this model conforms. Users may combine this key with to loadEmf
-                            "fileBasedMetamodelUris" both file-based and URI-based metamodels at the same time.
-                        </xs:documentation>
-                    </xs:annotation>
-                    <xs:sequence>
-                        <xs:element name="param" type="xs:string" maxOccurs="unbounded"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="fileBasedMetamodelUris" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>
-                        One of the keys used to construct the first argument to {@link
-                        org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
-
-                        This key is a comma-separated list of zero or more {@link URI}s that can be used to locate some
-                        of the metamodels to which this model conforms. Users may combine this key with "metaModelUris"
-                        to loadEmf both file-based and URI-based metamodels at the same time.
-                    </xs:documentation>
-                </xs:annotation>
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="fileBasedMetamodelUri" type="xs:string" maxOccurs="unbounded"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="modelUri" type="xs:string" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>
-                        One of the keys used to construct the first argument to {@link
-                        org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
-
-                        This key is paired with a {@link URI} that can be used to locate this model.
-                        This key must always be paired with a value.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="reuseUnmodifiedFileBasedMetamodels" type="xs:boolean" minOccurs="0" default="true">
-                <xs:annotation>
-                    <xs:documentation>
-                        One of the keys used to construct the first argument to
-                        {@link org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
-
-                        This key is a Boolean value that if set to <code>true</code> (the default), tries to reuse
-                        previously registered file-based EPackages that have not been modified since the last time they
-                        were registered.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
             <xs:element name="validateModel" type="xs:boolean" minOccurs="0" default="true">
                 <xs:annotation>
                     <xs:documentation>
                         Validate model against Ecore metamodel and fail on validation errors.
                     </xs:documentation>
                 </xs:annotation>
+            </xs:element>
+            <xs:element name="uriMap" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="entry" type="URIConverterMapType" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
@@ -173,7 +131,7 @@
             <xs:documentation>Plain XML model data type.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="artifact" type="xs:string"/>
+            <xs:element name="xml" type="xs:string"/>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="aliases" minOccurs="0">
                 <xs:complexType>
@@ -185,7 +143,7 @@
             <xs:element name="readOnLoad" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="storeOnDisposal" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="cached" type="xs:boolean" minOccurs="0" default="true"/>
-            <xs:element name="platformAlias" type="xs:string" minOccurs="0"/>
+            <xs:element name="referenceUri" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 
@@ -194,7 +152,7 @@
             <xs:documentation>XML model data type.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="artifact" type="xs:string"/>
+            <xs:element name="xml" type="xs:string"/>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="aliases" minOccurs="0">
                 <xs:complexType>
@@ -206,8 +164,7 @@
             <xs:element name="readOnLoad" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="storeOnDisposal" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="cached" type="xs:boolean" minOccurs="0" default="true"/>
-            <xs:element name="platformAlias" type="xs:string" minOccurs="0"/>
-            <xs:element name="metaModelFile" type="xs:string" minOccurs="0"/>
+            <xs:element name="referenceUri" type="xs:string" minOccurs="0"/>
             <xs:element name="xsd" type="xs:string" minOccurs="0"/>
             <xs:element name="expand" type="xs:boolean" minOccurs="0" default="true">
                 <xs:annotation>
@@ -220,62 +177,12 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="metaModelUris" minOccurs="0">
-                <xs:complexType>
-                    <xs:annotation>
-                        <xs:documentation>
-                            One of the keys used to construct the first argument to {@link
-                            org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
-
-                            This key is a comma-separated list of zero or more namespaces URI of some of the metamodels
-                            to which this model conforms. Users may combine this key with to loadEmf
-                            "fileBasedMetamodelUris" both file-based and URI-based metamodels at the same time.
-                        </xs:documentation>
-                    </xs:annotation>
-                    <xs:sequence>
-                        <xs:element name="param" type="xs:string" maxOccurs="unbounded"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="fileBasedMetamodelUris" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>
-                        One of the keys used to construct the first argument to {@link
-                        org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
-
-                        This key is a comma-separated list of zero or more {@link URI}s that can be used to locate some
-                        of the metamodels to which this model conforms. Users may combine this key with "metaModelUris"
-                        to loadEmf both file-based and URI-based metamodels at the same time.
-                    </xs:documentation>
-                </xs:annotation>
+            <xs:element name="uriMap" minOccurs="0">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="fileBasedMetamodelUri" type="xs:string" maxOccurs="unbounded"/>
+                        <xs:element name="entry" type="URIConverterMapType" maxOccurs="unbounded"/>
                     </xs:sequence>
                 </xs:complexType>
-            </xs:element>
-            <xs:element name="modelUri" type="xs:string" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>
-                        One of the keys used to construct the first argument to {@link
-                        org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
-
-                        This key is paired with a {@link URI} that can be used to locate this model.
-                        This key must always be paired with a value.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="reuseUnmodifiedFileBasedMetamodels" type="xs:boolean" minOccurs="0" default="true">
-                <xs:annotation>
-                    <xs:documentation>
-                        One of the keys used to construct the first argument to
-                        {@link org.eclipse.epsilon.emc.emf.EmfModel#load(StringProperties, String)}.
-
-                        This key is a Boolean value that if set to <code>true</code> (the default), tries to reuse
-                        previously registered file-based EPackages that have not been modified since the last time they
-                        were registered.
-                    </xs:documentation>
-                </xs:annotation>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
@@ -285,7 +192,7 @@
             <xs:documentation>Excel model data type.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="artifact" type="xs:string"/>
+            <xs:element name="excel" type="xs:string"/>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="aliases" minOccurs="0">
                 <xs:complexType>
@@ -297,9 +204,8 @@
             <xs:element name="readOnLoad" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="storeOnDisposal" type="xs:boolean" minOccurs="0" default="true"/>
             <xs:element name="cached" type="xs:boolean" minOccurs="0" default="true"/>
-            <xs:element name="platformAlias" type="xs:string" minOccurs="0"/>
-            <xs:element name="metaModelFile" type="xs:string" minOccurs="0"/>
-            <xs:element name="configurationArtifact" type="xs:string"/>
+            <xs:element name="referenceUri" type="xs:string" minOccurs="0"/>
+            <xs:element name="excelConfiguration" type="xs:string"/>
             <xs:element name="spreadSheetPassword" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
@@ -421,14 +327,14 @@
                     <xs:element name="expectedErrors" minOccurs="0">
                         <xs:complexType>
                             <xs:sequence>
-                                <xs:element name="expectedError" type="xs:string" maxOccurs="unbounded"/>
+                                <xs:element name="expectedError" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
                             </xs:sequence>
                         </xs:complexType>
                     </xs:element>
                     <xs:element name="expectedWarnings" minOccurs="0">
                         <xs:complexType>
                             <xs:sequence>
-                                <xs:element name="expectedWarning" type="xs:string" maxOccurs="unbounded"/>
+                                <xs:element name="expectedWarning" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
                             </xs:sequence>
                         </xs:complexType>
                     </xs:element>
@@ -446,4 +352,25 @@
             <xs:element name="value" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
+
+    <xs:complexType name="URIConverterMapType">
+        <xs:annotation>
+            <xs:documentation>URI Converter Map Entry.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="logicalURI" type="xs:string"/>
+            <xs:element name="physicalURI" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="InjectedContextType">
+        <xs:annotation>
+            <xs:documentation>Injected context classes.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="class" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
 </xs:schema>

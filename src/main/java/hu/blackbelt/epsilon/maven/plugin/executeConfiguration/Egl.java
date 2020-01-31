@@ -5,8 +5,11 @@ import hu.blackbelt.epsilon.runtime.execution.contexts.EglExecutionContext;
 import hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter;
 import lombok.Builder;
 
+import java.net.URI;
 import java.util.Collections;
 import java.util.stream.Collectors;
+
+import static hu.blackbelt.epsilon.runtime.execution.contexts.ProgramParameter.programParameterBuilder;
 
 @Builder
 public class Egl {
@@ -16,9 +19,9 @@ public class Egl {
     EglExecutionContext toExecutionContext() {
         return EglExecutionContext.eglExecutionContextBuilder()
                 .parameters(egl.getParameters() != null ? egl.getParameters().getParameter().stream()
-                        .map(p -> ProgramParameter.builder().name(p.getName()).value(p.getValue()).build())
+                        .map(p -> programParameterBuilder().name(p.getName()).value(p.getValue()).build())
                         .collect(Collectors.toList()) : Collections.emptyList())
-                .source(egl.getSource())
+                .source(URI.create(egl.getSource()))
                 .outputRoot(egl.getOutputRoot())
                 .build();
     }

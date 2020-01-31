@@ -10,8 +10,8 @@ import java.util.List;
 @Data
 public class PlainXmlModel {
 
-    @Parameter(name = "artifact", readonly = true, required = true)
-    String artifact;
+    @Parameter(name = "xml", readonly = true, required = true)
+    String xml;
 
     @Parameter(name = "name", required = true, readonly = true)
     String name;
@@ -28,29 +28,24 @@ public class PlainXmlModel {
     @Parameter(name = "cached", defaultValue = "true", readonly = true)
     boolean cached = true;
 
-    @Parameter(name = "platformAlias", readonly = true)
-    String platformAlias;
-
     @Override
     public String toString() {
         return "PlainXmlModel{" +
-                "artifact='" + artifact + '\'' +
+                "xml='" + xml + '\'' +
                 ", name='" + name + '\'' +
                 ", aliases=" + aliases +
                 ", readOnLoad=" + readOnLoad +
                 ", storeOnDisposal=" + storeOnDisposal +
                 ", cached=" + cached +
-                ", platformAlias='" + platformAlias + '\'' +
                 '}';
     }
 
     public PlainXmlModelContext toModelContext() {
-        return PlainXmlModelContext.builder()
+        return PlainXmlModelContext.plainXmlModelContextBuilder()
                 .aliases(aliases)
-                .artifacts(ImmutableMap.of("xml", artifact))
+                .xml(xml)
                 .cached(cached)
                 .name(name)
-                .platformAlias(platformAlias)
                 .readOnLoad(readOnLoad)
                 .storeOnDisposal(storeOnDisposal)
                 .build();
