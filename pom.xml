@@ -310,7 +310,7 @@
                     <plugin>
                         <groupId>de.jutzig</groupId>
                         <artifactId>github-release-plugin</artifactId>
-                        <version>1.2.0</version>
+                        <version>1.4.0</version>
                         <configuration>
                             <repositoryId>https://github.com/BlackBeltTechnology/epsilon-maven-plugin.git</repositoryId>
                             <description>Branch: ${env.WERCKER_GIT_BRANCH} Wercker: ${env.WERCKER_RUN_URL}</description>
