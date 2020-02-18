@@ -317,6 +317,7 @@
                             <releaseName>${project.version}</releaseName>
                             <prerelease>true</prerelease>
                             <tag>${project.version}</tag>
+                            <!--
                             <fileSets>
                                 <fileSet>
                                     <directory>target</directory>
@@ -324,7 +325,7 @@
                                         <include>*.jar</include>
                                     </includes>
                                 </fileSet>
-                            </fileSets>
+                            </fileSets> -->
                         </configuration>
                         <executions>
                             <execution>
