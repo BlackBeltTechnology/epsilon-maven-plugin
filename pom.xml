@@ -420,7 +420,7 @@
         </dependency>
     </dependencies>
 
-    <profiles>                                                                                      <!--done-->
+    <profiles>
         <profile>
             <id>modules</id>
             <activation>
