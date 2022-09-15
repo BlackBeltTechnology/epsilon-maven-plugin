@@ -45,7 +45,7 @@
         <revision>1.2.1-SNAPSHOT</revision>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <epsilon-runtime-version>1.4.0.20220522_205914_4b95b3e2_feature_JNG_3769_Improve_logging</epsilon-runtime-version>
+        <epsilon-runtime-version>1.5.0</epsilon-runtime-version>
         <deployOnly>false</deployOnly>
     </properties>
 
