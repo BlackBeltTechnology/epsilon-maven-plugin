@@ -21,7 +21,7 @@ package hu.blackbelt.epsilon.maven.plugin;
  */
 
 
-import hu.blackbelt.epsilon.runtime.execution.api.Log;
+import org.slf4j.Logger;
 import hu.blackbelt.epsilon.runtime.execution.impl.LogLevel;
 import hu.blackbelt.epsilon.runtime.execution.impl.StringBuilderLogger;
 import org.slf4j.Logger;
