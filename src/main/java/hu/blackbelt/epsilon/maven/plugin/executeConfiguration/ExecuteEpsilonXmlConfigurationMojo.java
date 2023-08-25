@@ -83,7 +83,7 @@ public class ExecuteEpsilonXmlConfigurationMojo extends AbstractMojo {
     @Parameter(name = "sourceDirectory", defaultValue = "${basedir}", required = true, readonly = true)
     public File sourceDirectory;
 
-    public Log log = new MavenLog(getLog());
+    public Logger log = new MavenLog(getLog());
 
 
     URIHandler uriHandler;
