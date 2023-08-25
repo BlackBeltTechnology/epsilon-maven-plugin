@@ -90,7 +90,7 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
         executionResourceSet.getURIConverter().getURIHandlers().add(0, uriHandler);
 
         // Default logger
-        Log log = new MavenLog(getLog());
+        Logger log = new MavenLog(getLog());
 
         Map<String, Object> injectedContextMap = Maps.newHashMap();
         if (injectedContexts != null) {
@@ -98,7 +98,7 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
                 try {
                     injectedContextMap.put(i.getName(), forName(i.getClazz()).newInstance());
                 } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-                    log.warn(e);
+                    log.warn("Error", e);
                 }
             }
         }

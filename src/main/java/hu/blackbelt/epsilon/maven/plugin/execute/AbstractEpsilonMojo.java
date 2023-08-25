@@ -62,7 +62,7 @@ public abstract class AbstractEpsilonMojo extends AbstractMojo {
     @Parameter(readonly = true)
     public List<ExcelModel> excelModels;
 
-    public Log log = new MavenLog(getLog());
+    public Logger log = new MavenLog(getLog());
 
     static {
         SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
