@@ -25,7 +25,7 @@ import com.google.common.collect.Maps;
 import hu.blackbelt.epsilon.maven.plugin.MavenLog;
 import hu.blackbelt.epsilon.maven.plugin.MavenURIHandler;
 import hu.blackbelt.epsilon.runtime.execution.ExecutionContext;
-import hu.blackbelt.epsilon.runtime.execution.api.Log;
+import org.slf4j.Logger;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -90,7 +90,7 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
         executionResourceSet.getURIConverter().getURIHandlers().add(0, uriHandler);
 
         // Default logger
-        Log log = new MavenLog(getLog());
+        Logger log = new MavenLog(getLog());
 
         Map<String, Object> injectedContextMap = Maps.newHashMap();
         if (injectedContexts != null) {
@@ -98,7 +98,7 @@ public class ExecuteEpsilonMojo extends AbstractEpsilonMojo {
                 try {
                     injectedContextMap.put(i.getName(), forName(i.getClazz()).newInstance());
                 } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-                    log.warn(e);
+                    log.warn("Error", e);
                 }
             }
         }
