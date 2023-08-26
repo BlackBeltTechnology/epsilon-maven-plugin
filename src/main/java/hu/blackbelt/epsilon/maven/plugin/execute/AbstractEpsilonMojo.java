@@ -21,7 +21,7 @@ package hu.blackbelt.epsilon.maven.plugin.execute;
  */
 
 import hu.blackbelt.epsilon.maven.plugin.MavenLog;
-import hu.blackbelt.epsilon.runtime.execution.api.Log;
+import org.slf4j.Logger;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -62,7 +62,7 @@ public abstract class AbstractEpsilonMojo extends AbstractMojo {
     @Parameter(readonly = true)
     public List<ExcelModel> excelModels;
 
-    public Log log = new MavenLog(getLog());
+    public Logger log = new MavenLog(getLog());
 
     static {
         SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
