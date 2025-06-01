@@ -96,7 +96,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <extensions>true</extensions>
-                <version>3.6.4</version>
+                <version>3.15.1</version>
                 <configuration>
                     <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
                 </configuration>
@@ -251,9 +251,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>3.11.2</version>
                 <configuration>
-                    <source>8</source>
+                    <source>21</source>
                     <detectJavaApiLink>false</detectJavaApiLink>
                     <failOnError>false</failOnError>
                     <detectJavaApiLink>false</detectJavaApiLink>
