@@ -48,7 +48,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <epsilon-runtime-version>2.8.0.20250818_020714_e9350189_feature_JNG_6322_Minimiize_Karaf_Size</epsilon-runtime-version>
+        <epsilon-runtime-version>2.8.0.20250820_074004_d018a661_develop</epsilon-runtime-version>
         <deployOnly>false</deployOnly>
 
         <surefire-version>3.5.1</surefire-version>
