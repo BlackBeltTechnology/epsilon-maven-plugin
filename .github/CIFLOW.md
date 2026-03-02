@@ -34,7 +34,7 @@ gitGraph
     commit id: "fix"
     checkout release/1.0
     merge bugfix/JNG-4 id: "merge-fix"
-    checkout main
+    checkout master
     merge release/1.0 id: "release-1.0"
     checkout develop
     merge release/1.0 id: "back-merge"
