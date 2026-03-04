@@ -41,6 +41,10 @@ Key facts:
 - [pom.xml](pom.xml): Single-module Maven POM with `${revision}` CI-friendly versioning
 - [src/main/resources/epsilon_plugin_v1.xsd](src/main/resources/epsilon_plugin_v1.xsd): XML Schema for `executeConfiguration` goal config files
 
+## Depends on
+
+- [epsilon-runtime](../epsilon-runtime): tools/epsilon-runtime
+
 ## Optional
 
 - [.github/workflows/build.yml](.github/workflows/build.yml): CI/CD build pipeline
