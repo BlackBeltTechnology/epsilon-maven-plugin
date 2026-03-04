@@ -1,0 +1,53 @@
+# epsilon-maven-plugin
+
+> A Maven plugin that integrates Eclipse Epsilon model transformation scripts (EOL, ETL, EML, ECL, EVL, EGL, EGX) into Maven builds, with support for EMF, XML, and Excel models.
+
+Key facts:
+- Java 11, single-module Maven plugin (`maven-plugin` packaging)
+- Built with Maven 3.8.x via Maven Wrapper (`./mvnw`)
+- Eclipse Epsilon 1.5.1 runtime with BlackBelt's epsilon-runtime-execution abstraction
+- Provides three goals: `execute`, `executeConfiguration`, and `parseHutn`
+- Resolves Maven artifacts as model resources via a custom `mvn:` URI scheme handler
+- Part of the BlackBelt/JUDO ecosystem
+- License: Eclipse Public License 2.0 (EPL-2.0)
+
+## Docs
+
+- [AGENTS.md](AGENTS.md): Developer guide with build commands, architecture overview, and coding conventions
+- [CONTRIBUTING.md](CONTRIBUTING.md): Development setup and contribution guidelines
+- [RELEASE-NOTES.md](RELEASE-NOTES.md): Version changelog
+
+## Source — Maven Goals
+
+- [src/main/java/hu/blackbelt/epsilon/maven/plugin/execute/ExecuteEpsilonMojo.java](src/main/java/hu/blackbelt/epsilon/maven/plugin/execute/ExecuteEpsilonMojo.java): `epsilon:execute` goal — runs Epsilon programs configured directly in the POM
+- [src/main/java/hu/blackbelt/epsilon/maven/plugin/executeConfiguration/ExecuteEpsilonXmlConfigurationMojo.java](src/main/java/hu/blackbelt/epsilon/maven/plugin/executeConfiguration/ExecuteEpsilonXmlConfigurationMojo.java): `epsilon:executeConfiguration` goal — runs Epsilon programs from external XML config files
+- [src/main/java/hu/blackbelt/epsilon/maven/plugin/parsehutn/ParseHutnMojo.java](src/main/java/hu/blackbelt/epsilon/maven/plugin/parsehutn/ParseHutnMojo.java): `epsilon:parseHutn` goal — parses HUTN files into EMF models
+
+## Source — Shared Infrastructure
+
+- [src/main/java/hu/blackbelt/epsilon/maven/plugin/execute/AbstractEpsilonMojo.java](src/main/java/hu/blackbelt/epsilon/maven/plugin/execute/AbstractEpsilonMojo.java): Base Mojo with shared parameters for model lists, metamodels, and Maven repository system
+- [src/main/java/hu/blackbelt/epsilon/maven/plugin/MavenURIHandler.java](src/main/java/hu/blackbelt/epsilon/maven/plugin/MavenURIHandler.java): Resolves `mvn:groupId:artifactId:version` URIs via Maven Aether
+- [src/main/java/hu/blackbelt/epsilon/maven/plugin/MavenLog.java](src/main/java/hu/blackbelt/epsilon/maven/plugin/MavenLog.java): Bridges Maven logging to SLF4J for the Epsilon runtime
+
+## Source — Model Types
+
+- [src/main/java/hu/blackbelt/epsilon/maven/plugin/execute/EmfModel.java](src/main/java/hu/blackbelt/epsilon/maven/plugin/execute/EmfModel.java): EMF model configuration with validation, caching, and URI mapping
+- [src/main/java/hu/blackbelt/epsilon/maven/plugin/execute/XmlModel.java](src/main/java/hu/blackbelt/epsilon/maven/plugin/execute/XmlModel.java): XML model with XSD schema support
+- [src/main/java/hu/blackbelt/epsilon/maven/plugin/execute/PlainXmlModel.java](src/main/java/hu/blackbelt/epsilon/maven/plugin/execute/PlainXmlModel.java): Plain XML model without schema
+- [src/main/java/hu/blackbelt/epsilon/maven/plugin/execute/ExcelModel.java](src/main/java/hu/blackbelt/epsilon/maven/plugin/execute/ExcelModel.java): Excel spreadsheet model
+
+## Configuration
+
+- [pom.xml](pom.xml): Single-module Maven POM with `${revision}` CI-friendly versioning
+- [src/main/resources/epsilon_plugin_v1.xsd](src/main/resources/epsilon_plugin_v1.xsd): XML Schema for `executeConfiguration` goal config files
+
+## Depends on
+
+- [epsilon-runtime](../epsilon-runtime): tools/epsilon-runtime
+
+## Optional
+
+- [.github/workflows/build.yml](.github/workflows/build.yml): CI/CD build pipeline
+- [.github/workflows/release.yml](.github/workflows/release.yml): Release automation workflow
+- [LICENSE.txt](LICENSE.txt): EPL-2.0 license text
+- [logback-test.xml](logback-test.xml): Test logging configuration
