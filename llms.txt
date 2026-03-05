@@ -43,7 +43,7 @@ Key facts:
 
 ## Depends on
 
-- [epsilon-runtime](../epsilon-runtime): tools/epsilon-runtime
+- [epsilon-runtime](../epsilon-runtime): Eclipse Epsilon runtime for Maven and OSGi environments
 
 ## Optional
 
