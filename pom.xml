@@ -48,7 +48,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <epsilon-runtime-version>2.8.0.20251022_112123_14c440b1_develop</epsilon-runtime-version>
+        <epsilon-runtime-version>2.8.0.20260312_044533_9e4fdaca_develop</epsilon-runtime-version>
         <deployOnly>false</deployOnly>
 
         <surefire-version>3.5.1</surefire-version>
